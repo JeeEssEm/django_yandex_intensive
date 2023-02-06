@@ -9,7 +9,9 @@
 ```python -m venv venv```
 
 #### 3. Активация виртуальной среды
-> **Примечание:** в данном примере среда активируется в ОС Windows, Powershell 
+> **Примечание:** в данном примере среда активируется в ОС Windows, Powershell.  
+> Решение для **Unix или MacOS**, используя **bash**:  
+> ```source venv/bin/activate```
 
 ```.\venv\Scripts\Activate.ps1```
 
