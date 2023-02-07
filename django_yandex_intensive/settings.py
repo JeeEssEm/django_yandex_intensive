@@ -28,7 +28,10 @@ DEBUG = os.environ.get('DEBUG', default='True') == 'True'
 if DEBUG:
     ALLOWED_HOSTS = ['*']
 else:
-    ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS', default='*').split(',')
+    ALLOWED_HOSTS = os.environ.get(
+        'ALLOWED_HOSTS',
+        default='127.0.0.1'
+    ).split(',')
 
 # Application definition
 
