@@ -36,12 +36,3 @@ jobs:
     - name: black check
       run: |
         black .
-    - name: check naming
-      run: |
-
-    - name: check imports order
-      run: |
-
-    - name: check quotes
-      run: |
-        
