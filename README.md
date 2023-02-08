@@ -1,3 +1,5 @@
+![flake8 test](https://github.com/JeeEssEm/django_yandex_intensive/actions/workflows/python-package.yml/badge.svg)
+
 # django_yandex_intensive
 
 # Быстрый запуск
@@ -32,6 +34,7 @@ SECRET_KEY с значением секретного ключа и переме
 ```
 ALLOWED_HOSTS=127.0.0.1,localhost
 ```
+> Пример файла .env можно посмотреть в .env.example
 
 #### 6. Запуск проекта
 ```python manage.py runserver```
