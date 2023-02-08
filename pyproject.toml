@@ -1,0 +1,3 @@
+[tool.black]
+exclude = ["venv"]
+skip-string-normalization = 1

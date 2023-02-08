@@ -35,4 +35,4 @@ jobs:
         flake8 . --count --show-source --statistics
     - name: black check
       run: |
-        black .
+        black . --check
