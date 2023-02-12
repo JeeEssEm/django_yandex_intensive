@@ -28,10 +28,9 @@ DEBUG = os.environ.get('DEBUG', default='True') == 'True'
 if DEBUG:
     ALLOWED_HOSTS = ['*']
 else:
-    ALLOWED_HOSTS = os.environ.get(
-        'ALLOWED_HOSTS',
-        default='127.0.0.1'
-    ).split(',')
+    ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS', default='127.0.0.1').split(
+        ','
+    )
 
 # Application definition
 
@@ -45,6 +44,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'debug_toolbar'
 ]
 
 MIDDLEWARE = [
@@ -55,6 +55,11 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'debug_toolbar.middleware.DebugToolbarMiddleware'
+]
+
+INTERNAL_IPS = [
+    '127.0.0.1'
 ]
 
 ROOT_URLCONF = 'django_yandex_intensive.urls'
@@ -93,19 +98,19 @@ DATABASES = {
 AUTH_PASSWORD_VALIDATORS = [
     {
         'NAME': 'django.contrib.auth.password_validation'
-                '.UserAttributeSimilarityValidator',
+        '.UserAttributeSimilarityValidator',
     },
     {
         'NAME': 'django.contrib.auth.password_validation'
-                '.MinimumLengthValidator',
+        '.MinimumLengthValidator',
     },
     {
         'NAME': 'django.contrib.auth.password_validation'
-                '.CommonPasswordValidator',
+        '.CommonPasswordValidator',
     },
     {
         'NAME': 'django.contrib.auth.password_validation'
-                '.NumericPasswordValidator',
+        '.NumericPasswordValidator',
     },
 ]
 
