@@ -59,7 +59,9 @@ MIDDLEWARE = [
     'debug_toolbar.middleware.DebugToolbarMiddleware',
 ]
 
-INTERNAL_IPS = ['127.0.0.1']
+INTERNAL_IPS = os.environ.get('INTERNAL_IPS', default='127.0.0.1').split(
+        ','
+    )
 
 ROOT_URLCONF = 'django_yandex_intensive.urls'
 
