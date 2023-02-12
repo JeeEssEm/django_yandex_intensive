@@ -11,7 +11,7 @@ class StaticUrlTest(TestCase):
             ('1', 200), ('123123123123', 200),
             ('asd', 404), ('catalog/1', 404), ('123asd', 404),
             ('123asd/asdew', 404), ('$#@', 404), ('123#', 200),
-            ('$123', 404),
+            ('$123', 404), ('catalog/-1', 404)
         ]
         for case, status in cases:
             with self.subTest(f'Test case: {case}, expected: {status}'):
