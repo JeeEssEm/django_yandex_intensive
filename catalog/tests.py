@@ -18,3 +18,27 @@ class StaticUrlTest(TestCase):
             with self.subTest(f'Test case: {case}, expected: {status}'):
                 response = Client().get(f'/catalog/{case}')
                 self.assertEqual(response.status_code, status)
+
+    def test_positive_integer(self):
+        cases = [
+            ('0', 404), ('-1', 404), ('-9', 404), ('01', 404), ('-0', 404),
+            ('1', 200), ('1000', 200), ('123456789', 200),
+            ('asd', 404), ('-asd', 404), ('1asd', 404), ('asd123', 404),
+        ]
+
+        for case, status in cases:
+            with self.subTest(f'Case: {case}, expected: {status}'):
+                response = Client().get(f'/catalog/re/{case}')
+                self.assertEqual(response.status_code, status)
+
+    def test_converter(self):
+        cases = [
+            ('0', 404), ('-1', 404), ('-9', 404), ('01', 404), ('-0', 404),
+            ('1', 200), ('1000', 200), ('123456789', 200),
+            ('asd', 404), ('-asd', 404), ('1asd', 404), ('asd123', 404),
+        ]
+
+        for case, status in cases:
+            with self.subTest(f'Case: {case}, expected: {status}'):
+                response = Client().get(f'/catalog/converter/{case}')
+                self.assertEqual(response.status_code, status)
