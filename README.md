@@ -1,4 +1,5 @@
 ![flake8 test](https://github.com/JeeEssEm/django_yandex_intensive/actions/workflows/python-package.yml/badge.svg)
+![django tests](https://github.com/JeeEssEm/django_yandex_intensive/actions/workflows/django.yml/badge.svg)
 
 # django_yandex_intensive
 
