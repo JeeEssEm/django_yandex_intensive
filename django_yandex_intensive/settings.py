@@ -33,6 +33,9 @@ else:
         default='127.0.0.1'
     ).split(',')
 
+
+REVERSE_REQUEST = os.environ.get('REVERSE_REQUEST', default='True') == 'True'
+
 # Application definition
 
 INSTALLED_APPS = [
@@ -58,6 +61,9 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'debug_toolbar.middleware.DebugToolbarMiddleware',
 ]
+
+if REVERSE_REQUEST:
+    MIDDLEWARE.append('my_middleware.middleware.reverse_middleware')
 
 INTERNAL_IPS = os.environ.get(
     'INTERNAL_IPS',
