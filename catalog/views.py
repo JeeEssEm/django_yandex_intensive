@@ -11,4 +11,3 @@ def item_detail(request, el):
 
 def positive_integer(request, number):
     return HttpResponse(f'<body>{number}</body>')
-

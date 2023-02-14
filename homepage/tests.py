@@ -13,4 +13,3 @@ class StaticUrlTest(TestCase):
     def test_teapot_content(self):
         response = Client().get('/coffee/')
         self.assertContains(response, 'Я чайник', status_code=418)
-
