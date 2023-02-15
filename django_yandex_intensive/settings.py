@@ -63,7 +63,7 @@ MIDDLEWARE = [
 ]
 
 if REVERSE_REQUEST:
-    MIDDLEWARE.append('my_middleware.middleware.reverse_middleware')
+    MIDDLEWARE.append('my_middleware.middleware.ReverseMiddleware')
 
 INTERNAL_IPS = os.environ.get(
     'INTERNAL_IPS',

@@ -6,7 +6,7 @@ def item_list(request):
 
 
 def item_detail(request, el):
-    return HttpResponse(f'<body>Подробно элемент {el}</body>')
+    return HttpResponse(f'<body>detailed about {el}</body>')
 
 
 def positive_integer(request, pk):
