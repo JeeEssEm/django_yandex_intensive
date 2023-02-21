@@ -2,6 +2,3 @@
 exclude = ['venv', '*/migrations/']
 skip-string-normalization = 1
 line-length=79
-
-[tool.flake8]
-exclude = ['venv', '*/migrations/']
