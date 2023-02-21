@@ -1,0 +1,22 @@
+[
+  {
+    "model": "catalog.category",
+    "pk": 3,
+    "fields": {
+      "name": "Бургеры",
+      "is_published": true,
+      "slug": "burger-slug",
+      "weight": 232
+    }
+  },
+  {
+    "model": "catalog.category",
+    "pk": 4,
+    "fields": {
+      "name": "Снэки",
+      "is_published": true,
+      "slug": "snacks-slug",
+      "weight": 150
+    }
+  }
+]

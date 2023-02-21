@@ -1,0 +1,71 @@
+[
+  {
+    "model": "catalog.item",
+    "pk": 1,
+    "fields": {
+      "name": "Шефбургер",
+      "is_published": true,
+      "text": "превосходно приготовленный",
+      "category": 3,
+      "tags": [
+        4,
+        5
+      ]
+    }
+  },
+  {
+    "model": "catalog.item",
+    "pk": 2,
+    "fields": {
+      "name": "Чизбургер",
+      "is_published": true,
+      "text": "превосходно приготовленный на огне",
+      "category": 3,
+      "tags": [
+        5
+      ]
+    }
+  },
+  {
+    "model": "catalog.item",
+    "pk": 3,
+    "fields": {
+      "name": "Стрипсы",
+      "is_published": true,
+      "text": "роскошно приготовленный в специях",
+      "category": 4,
+      "tags": [
+        1,
+        2,
+        4
+      ]
+    }
+  },
+  {
+    "model": "catalog.item",
+    "pk": 4,
+    "fields": {
+      "name": "Картошка фри",
+      "is_published": true,
+      "text": "превосходно приготовленный в соли",
+      "category": 4,
+      "tags": [
+        2
+      ]
+    }
+  },
+  {
+    "model": "catalog.item",
+    "pk": 5,
+    "fields": {
+      "name": "Боксмастер",
+      "is_published": true,
+      "text": "превосходно к употреблению",
+      "category": 4,
+      "tags": [
+        3,
+        5
+      ]
+    }
+  }
+]
