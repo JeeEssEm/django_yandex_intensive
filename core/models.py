@@ -5,6 +5,7 @@ import django.db.models
 class AbstractItem(django.db.models.Model):
     name = django.db.models.CharField(
         'Название',
+        help_text='Название, длина не более 150 символов',
         max_length=150
     )
     is_published = django.db.models.BooleanField(
@@ -20,8 +21,9 @@ class AbstractItem(django.db.models.Model):
 
 
 class AbstractName(django.db.models.Model):
-    slug = django.db.models.CharField(
+    slug = django.db.models.SlugField(
         'Cлаг',
+        help_text='Человекочитаемый формат URL',
         max_length=200,
         unique=True,
         validators=[

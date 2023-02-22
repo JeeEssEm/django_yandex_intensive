@@ -11,20 +11,20 @@ class Category(core.models.AbstractItem, core.models.AbstractName):
         'Масса',
         default=100,
         validators=[
-            django.core.validators.MinValueValidator(0),
+            django.core.validators.MinValueValidator(1),
             django.core.validators.MaxValueValidator(32767),
         ],
     )
 
     class Meta:
-        verbose_name_plural = 'Категории'
-        verbose_name = 'Категория'
+        verbose_name_plural = 'категории'
+        verbose_name = 'категория'
 
 
 class Tag(core.models.AbstractItem, core.models.AbstractName):
     class Meta:
-        verbose_name_plural = 'Теги'
-        verbose_name = 'Тег'
+        verbose_name_plural = 'теги'
+        verbose_name = 'тег'
 
 
 class Item(core.models.AbstractItem):
@@ -38,15 +38,15 @@ class Item(core.models.AbstractItem):
     category = django.db.models.ForeignKey(
         to=Category,
         on_delete=django.db.models.deletion.CASCADE,
-        verbose_name='Категория',
+        verbose_name='категория',
         default=None,
     )
 
     tags = django.db.models.ManyToManyField(Tag)
 
     class Meta:
-        verbose_name_plural = 'Товары'
-        verbose_name = 'Товар'
+        verbose_name_plural = 'товары'
+        verbose_name = 'товар'
 
     def __str__(self):
         return self.text[:15]

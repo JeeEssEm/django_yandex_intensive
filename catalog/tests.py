@@ -98,9 +98,14 @@ class ModelsTests(TestCase):
         cls.categories = models.Category.objects.all()
         cls.tags = models.Tag.objects.all()
 
+    @classmethod
+    def tearDownClass(cls):
+        cls.categories.delete()
+        cls.tags.delete()
+
     # тестирование модели category
     @parameterized.expand(
-        [(-1,), (-32323212,), (32768,), (999999,), (1000000,)]
+        [(-1,), (-32323212,), (32768,), (999999,), (1000000,), (0,)]
     )
     def test_wrong_weight_category(self, weight):
         category_count = models.Category.objects.count()
@@ -114,7 +119,7 @@ class ModelsTests(TestCase):
 
         self.assertEqual(models.Category.objects.count(), category_count)
 
-    @parameterized.expand([(0,), (123,), (32767,), (9999,), (4,), (12312,)])
+    @parameterized.expand([(1,), (123,), (32767,), (9999,), (4,), (12312,)])
     def test_correct_weight_category(self, weight):
         category_count = models.Category.objects.count()
         self.cat = models.Category(
@@ -177,9 +182,12 @@ class ModelsTests(TestCase):
         self.assertEqual(category_count + 1, models.Category.objects.count())
 
     # тестирование модели item
-    @parameterized.expand(
-        [('превосходно приготовленный',), ('роскошно посоленный',)]
-    )
+    @parameterized.expand([
+            ('превосходно приготовленный',),
+            ('роскошно посоленный',),
+            ('роскошно',),
+            ('превосходно',)
+        ])
     def test_correct_item_text(self, text):
         items_count = models.Item.objects.count()
         self.item = models.Item(
@@ -191,7 +199,15 @@ class ModelsTests(TestCase):
 
         self.assertEqual(models.Item.objects.count(), items_count + 1)
 
-    @parameterized.expand([('приготовленный',), ('посоленный',)])
+    @parameterized.expand([
+        ('приготовленный',),
+        ('посоленный',),
+        ('роскошный',),
+        ('прекрасно',),
+        ('роскошноооы',),
+        ('препревосходно',),
+        ('превосходночень',),
+    ])
     def test_wrong_item_text(self, text):
         items_count = models.Item.objects.count()
         with self.assertRaises(django.core.exceptions.ValidationError):
