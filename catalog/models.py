@@ -31,7 +31,7 @@ class Item(core.models.AbstractItem):
     text = django.db.models.TextField(
         'Описание',
         validators=[
-            validators.contains_perfect_words,
+            validators.ValidateMustContain('превосходно', 'роскошно'),
         ],
     )
 
