@@ -9,6 +9,7 @@ from . import validators
 class Category(core.models.AbstractItem, core.models.AbstractName):
     weight = django.db.models.PositiveIntegerField(
         'Масса',
+        help_text='Введите массу, значение не больше 32767 и не меньше 1',
         default=100,
         validators=[
             django.core.validators.MinValueValidator(1),
@@ -39,7 +40,6 @@ class Item(core.models.AbstractItem):
         to=Category,
         on_delete=django.db.models.deletion.CASCADE,
         verbose_name='категория',
-        default=None,
     )
 
     tags = django.db.models.ManyToManyField(Tag)
