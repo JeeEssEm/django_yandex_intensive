@@ -27,6 +27,9 @@ class CategoryAdmin(django.contrib.admin.ModelAdmin):
     list_editable = (
         catalog.models.Category.is_published.field.name,
     )
+    exclude = (
+        catalog.models.Category.normalized_name.field.name,
+    )
 
 
 @django.contrib.admin.register(catalog.models.Tag)
@@ -37,4 +40,7 @@ class TagAdmin(django.contrib.admin.ModelAdmin):
     )
     list_editable = (
         catalog.models.Tag.is_published.field.name,
+    )
+    exclude = (
+        catalog.models.Tag.normalized_name.field.name,
     )

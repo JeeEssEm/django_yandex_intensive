@@ -1,4 +1,6 @@
-import django.core.validators
+from catalog import utils
+
+import django.core.exceptions
 import django.db.models
 
 
@@ -12,9 +14,31 @@ class AbstractItem(django.db.models.Model):
         'Опубликовано',
         default=True
     )
+    normalized_name = django.db.models.CharField(
+        'Нормализованное имя',
+        max_length=150,
+        unique=True,
+    )
 
     class Meta:
         abstract = True
+
+    def save(self):
+        self.normalized_name = utils.get_normalized(self.name)
+        super().save()
+
+    def validate_unique(self, exclude=None):
+        self.normalized_name = utils.get_normalized(self.name)
+        similar_obj = type(self).objects.filter(
+            normalized_name=self.normalized_name
+        ).first()
+
+        if similar_obj is not None and similar_obj != self:
+            raise django.core.exceptions.ValidationError({
+                'name': 'Похожее имя уже существует'
+                })
+
+        return super().validate_unique(exclude)
 
     def __str__(self):
         return self.name

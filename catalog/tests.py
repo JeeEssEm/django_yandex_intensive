@@ -91,7 +91,7 @@ class StaticUrlTest(TestCase):
 
 
 class ModelsTests(TestCase):
-    fixtures = ['category_fixture.json', 'tag_fixture.json']
+    fixtures = ['category_new_fixture.json', 'tag_new_fixture.json']
 
     @classmethod
     def setUpTestData(cls):
@@ -123,9 +123,9 @@ class ModelsTests(TestCase):
     def test_correct_weight_category(self, weight):
         category_count = models.Category.objects.count()
         self.cat = models.Category(
-            name='test', slug='some-correct-slug', weight=weight
+            name='test', slug='some-correct-slug', weight=weight,
         )
-
+        self.cat.validate_unique()
         self.cat.full_clean()
         self.cat.save()
 
@@ -158,8 +158,12 @@ class ModelsTests(TestCase):
     )
     def test_correct_slug_category(self, slug):
         category_count = models.Category.objects.count()
-        self.cat = models.Category(name='test', slug=slug, weight=100)
-
+        self.cat = models.Category(
+            name='test',
+            slug=slug,
+            weight=100,
+            )
+        self.cat.validate_unique()
         self.cat.full_clean()
         self.cat.save()
 
@@ -167,8 +171,12 @@ class ModelsTests(TestCase):
 
     def test_duplicate_slug_category(self):
         category_count = models.Category.objects.count()
-        self.cat = models.Category(name='test', slug='normal-slug', weight=100)
-
+        self.cat = models.Category(
+            name='test',
+            slug='normal-slug',
+            weight=100,
+            )
+        self.cat.validate_unique()
         self.cat.full_clean()
         self.cat.save()
 
@@ -191,8 +199,9 @@ class ModelsTests(TestCase):
     def test_correct_item_text(self, text):
         items_count = models.Item.objects.count()
         self.item = models.Item(
-            name='some name', category=self.categories[0], text=text
+            name='some name', category=self.categories[0], text=text,
         )
+        self.item.validate_unique()
         self.item.full_clean()
         self.item.save()
         self.item.tags.add(self.tags[0])
@@ -251,8 +260,9 @@ class ModelsTests(TestCase):
         items_count = models.Item.objects.count()
 
         self.item = models.Item(
-            name=name, category=self.categories[0], text='превосходно'
+            name=name, category=self.categories[0], text='превосходно',
         )
+        self.item.validate_unique()
         self.item.full_clean()
         self.item.save()
         self.item.tags.add(self.tags[0])
@@ -294,8 +304,30 @@ class ModelsTests(TestCase):
             name='test',
             slug=slug,
         )
-
+        self.tag.validate_unique()
         self.tag.full_clean()
         self.tag.save()
+
+        self.assertEqual(models.Tag.objects.count(), tag_count + 1)
+
+    def test_normalized(self):
+        tag_count = models.Tag.objects.count()
+
+        self.correct_tag = models.Tag(
+            name='balance',
+            slug='slugg',
+        )
+        self.correct_tag.validate_unique()
+        self.correct_tag.full_clean()
+        self.correct_tag.save()
+
+        with self.assertRaises(django.core.exceptions.ValidationError):
+            self.wrong_tag = models.Tag(
+                name='bаlаnce',
+                slug='slug',
+            )
+            self.wrong_tag.validate_unique()
+            self.wrong_tag.full_clean()
+            self.wrong_tag.save()
 
         self.assertEqual(models.Tag.objects.count(), tag_count + 1)
