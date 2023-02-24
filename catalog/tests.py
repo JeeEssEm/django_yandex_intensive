@@ -91,7 +91,7 @@ class StaticUrlTest(TestCase):
 
 
 class ModelsTests(TestCase):
-    fixtures = ['category_new_fixture.json', 'tag_new_fixture.json']
+    fixtures = ['category_fixture.json', 'tag_fixture.json']
 
     @classmethod
     def setUpTestData(cls):
