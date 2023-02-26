@@ -8,6 +8,7 @@ class ItemAdmin(django.contrib.admin.ModelAdmin):
     list_display = (
         catalog.models.Item.name.field.name,
         catalog.models.Item.is_published.field.name,
+        catalog.models.Item.get_main_image,
     )
     list_editable = (
         catalog.models.Item.is_published.field.name,
@@ -15,6 +16,13 @@ class ItemAdmin(django.contrib.admin.ModelAdmin):
 
     filter_horizontal = (
         'tags',
+    )
+
+
+@django.contrib.admin.register(catalog.models.ImageModel)
+class ImageAdmin(django.contrib.admin.ModelAdmin):
+    list_display = (
+        catalog.models.ImageModel.image_thumb,
     )
 
 

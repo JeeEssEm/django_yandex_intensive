@@ -13,7 +13,7 @@ class MiddlewareTest(TestCase):
         client = Client()
 
         urls = [
-            ('/catalog/', 'косипС вотнемелэ', 200),
+            ('/catalog/', 'ацинартС с имаравот', 200),
             ('/coffee/', 'Я кинйач', 418),
             ('/about/', 'О еткеорп', 200),
         ]
@@ -40,7 +40,7 @@ class MiddlewareTest(TestCase):
         """ проверка на срабатанывание на каждый 10 запрос """
         client = Client()
         response = get_nth_page(client, 100, '/catalog/')
-        self.assertContains(response, 'косипС вотнемелэ')
+        self.assertContains(response, 'ацинартС с имаравот')
 
     @modify_settings(MIDDLEWARE={
         'remove': 'my_middleware.middleware.ReverseMiddleware'
@@ -48,7 +48,7 @@ class MiddlewareTest(TestCase):
     def test_disabled(self):
         client = Client()
         response = get_nth_page(client, 10, '/catalog/')
-        self.assertContains(response, 'Список элементов')
+        self.assertContains(response, 'Страница с товарами')
 
     def test_request_other_urls(self):
         """ проверка запросов на разные url """
@@ -59,5 +59,6 @@ class MiddlewareTest(TestCase):
 
     def test_not_russian(self):
         client = Client()
-        response = get_nth_page(client, 10, '/catalog/123')
-        self.assertContains(response, 'detailed about 123')
+        response = get_nth_page(client, 10, '')
+        rs = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit,'
+        self.assertContains(response, rs)

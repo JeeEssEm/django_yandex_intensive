@@ -11,7 +11,11 @@ def item_list(request):
 
 
 def item_detail(request, el):
-    return HttpResponse(f'<body>detailed about {el}</body>')
+    template = 'catalog/item_page.html'
+    context = {
+        'item': el
+    }
+    return render(request, template, context)
 
 
 def positive_integer(request, pk):
