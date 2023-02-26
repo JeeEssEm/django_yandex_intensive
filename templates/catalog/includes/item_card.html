@@ -1,0 +1,11 @@
+{% block content %}
+    {% load static %}
+    <a href="{% url 'catalog:item_detail' item %}" class="text-decoration-none">
+        <div class="card shadow-sm">
+            <img src="{{ MEDIA_URL }}/kote.jpg" alt="котек затычка">
+            <div class="card-body">
+                <p class="card-text">товар №{{ item }}</p>
+            </div>
+        </div>
+    </a>
+{% endblock %}
