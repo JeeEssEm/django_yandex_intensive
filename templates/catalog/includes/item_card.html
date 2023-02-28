@@ -1,0 +1,9 @@
+{% block content %}
+    {% load static %}
+    <div class="card shadow-sm">
+        <img src="{{ MEDIA_URL }}/kote.jpg" alt="котек затычка">
+        <div class="card-body">
+            <p class="card-text">товар №{{ item }}</p>
+        </div>
+    </div>
+{% endblock %}
