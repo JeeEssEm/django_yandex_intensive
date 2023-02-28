@@ -1,3 +1,5 @@
+import re
+
 import core.models
 
 import django.core.validators
@@ -5,6 +7,8 @@ import django.db.models
 from django.utils.safestring import mark_safe
 
 from sorl.thumbnail import get_thumbnail
+
+from tinymce.models import HTMLField
 
 from . import validators
 
@@ -32,7 +36,7 @@ class Tag(core.models.AbstractItem, core.models.AbstractName):
 
 
 class Item(core.models.AbstractItem):
-    text = django.db.models.TextField(
+    text = HTMLField(
         'Описание',
         validators=[
             validators.ValidateMustContain('превосходно', 'роскошно'),
@@ -60,7 +64,13 @@ class Item(core.models.AbstractItem):
         verbose_name = 'товар'
 
     def __str__(self):
-        return self.text[:15]
+        open_tag = '<[^>]*>'
+        close_tag = r'</[^>]*>'
+
+        txt = re.sub(open_tag, '', self.text[::])
+        txt = re.sub(close_tag, '', txt[::])
+
+        return txt[:15]
 
 
 class Image(django.db.models.Model):

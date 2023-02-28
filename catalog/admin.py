@@ -5,6 +5,9 @@ import django.contrib.admin
 
 @django.contrib.admin.register(catalog.models.Item)
 class ItemAdmin(django.contrib.admin.ModelAdmin):
+    exclude = (
+        catalog.models.Item.normalized_name.field.name,
+    )
     list_display = (
         catalog.models.Item.name.field.name,
         catalog.models.Item.is_published.field.name,
