@@ -1,7 +1,8 @@
-import core.models
-
 import django.core.validators
 import django.db.models
+
+import core.models
+
 from django.utils.safestring import mark_safe
 
 from sorl.thumbnail import get_thumbnail
@@ -31,33 +32,6 @@ class Tag(core.models.AbstractItem, core.models.AbstractName):
         verbose_name = 'тег'
 
 
-class ImageModel(django.db.models.Model):
-    image = django.db.models.ImageField(
-        'Прикрепите изображение',
-        upload_to='catalog/'
-    )
-
-    class Meta:
-        verbose_name = 'изображение'
-        verbose_name_plural = 'изображения'
-
-    def get_image_x1280(self):
-        return get_thumbnail(self.image, '1280', quality=51)
-
-    def get_image_300x300(self):
-        return get_thumbnail(self.image, '300x300', crop='center', quality=51)
-
-    def image_thumb(self):
-        if self.image:
-            return mark_safe(
-                f'<img src="{self.image.url}" class="w-50">'
-            )
-        return 'Нет изображения'
-
-    image_thumb.short_description = 'превью'
-    image_thumb.allow_tags = True
-
-
 class Item(core.models.AbstractItem):
     text = django.db.models.TextField(
         'Описание',
@@ -73,15 +47,6 @@ class Item(core.models.AbstractItem):
     )
 
     tags = django.db.models.ManyToManyField(Tag)
-    images = django.db.models.ManyToManyField(ImageModel)
-    main_image = django.db.models.ForeignKey(
-        to=ImageModel,
-        on_delete=django.db.models.deletion.CASCADE,
-        verbose_name='Главное изображение',
-        null=True,
-        blank=True,
-        related_name='main_image'
-    )
 
     def get_main_image(self):
         if self.main_image is not None:
@@ -97,3 +62,69 @@ class Item(core.models.AbstractItem):
 
     def __str__(self):
         return self.text[:15]
+
+
+class Image(django.db.models.Model):
+    image = django.db.models.ImageField(
+        'Прикрепите изображение',
+        upload_to='catalog/',
+    )
+    item = django.db.models.OneToOneField(
+        to=Item,
+        on_delete=django.db.models.deletion.CASCADE,
+        related_name='main_image',
+        verbose_name='товар'
+    )
+
+    class Meta:
+        verbose_name = 'изображение'
+        verbose_name_plural = 'изображения'
+
+    def get_image_x1280(self):
+        return get_thumbnail(self.image, '1280', quality=51)
+
+    def get_image_300x300(self):
+        return get_thumbnail(self.image, '300x300', crop='center', quality=51)
+
+    def image_thumb(self):
+        if self.image:
+            return mark_safe(
+                f'<img src="{self.get_image_300x300().url}" width=50>'
+            )
+        return 'Нет изображения'
+
+    image_thumb.short_description = 'превью'
+    image_thumb.allow_tags = True
+
+    def __str__(self):
+        return self.image.url
+
+
+class Gallery(django.db.models.Model):
+    image = django.db.models.ImageField(
+        'Прикрепите изображение',
+        upload_to='catalog/',
+        null=True,
+    )
+    item = django.db.models.ForeignKey(
+        to=Item,
+        on_delete=django.db.models.deletion.CASCADE,
+        verbose_name='товар'
+    )
+
+    class Meta:
+        verbose_name_plural = 'галереи'
+        verbose_name = 'галерея'
+
+    def get_image_300x300(self):
+        return get_thumbnail(self.image, '300x300', crop='center', quality=51)
+
+    def image_thumb(self):
+        if self.image:
+            return mark_safe(
+                f'<img src="{self.get_image_300x300().url}" width=50>'
+            )
+        return 'Нет изображения'
+
+    def __str__(self):
+        return self.image.url

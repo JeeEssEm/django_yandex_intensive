@@ -1,6 +1,6 @@
-import catalog.models
-
 import django.contrib.admin
+
+import catalog.models
 
 
 @django.contrib.admin.register(catalog.models.Item)
@@ -8,7 +8,7 @@ class ItemAdmin(django.contrib.admin.ModelAdmin):
     list_display = (
         catalog.models.Item.name.field.name,
         catalog.models.Item.is_published.field.name,
-        catalog.models.Item.get_main_image,
+        catalog.models.Item.get_main_image
     )
     list_editable = (
         catalog.models.Item.is_published.field.name,
@@ -19,10 +19,21 @@ class ItemAdmin(django.contrib.admin.ModelAdmin):
     )
 
 
-@django.contrib.admin.register(catalog.models.ImageModel)
+@django.contrib.admin.register(catalog.models.Image)
 class ImageAdmin(django.contrib.admin.ModelAdmin):
     list_display = (
-        catalog.models.ImageModel.image_thumb,
+        catalog.models.Image.item.field.name,
+        catalog.models.Image.image.field.name,
+        catalog.models.Image.image_thumb
+    )
+
+
+@django.contrib.admin.register(catalog.models.Gallery)
+class GalleryAdmin(django.contrib.admin.ModelAdmin):
+    list_display = (
+        catalog.models.Image.item.field.name,
+        catalog.models.Image.image.field.name,
+        catalog.models.Image.image_thumb
     )
 
 
