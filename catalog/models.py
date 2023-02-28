@@ -1,6 +1,5 @@
-from tinymce.models import HTMLField
-
 import core.models
+import core.utils
 
 import django.core.validators
 import django.db.models
@@ -8,8 +7,9 @@ from django.utils.safestring import mark_safe
 
 from sorl.thumbnail import get_thumbnail
 
+from tinymce.models import HTMLField
+
 from . import validators
-import core.utils
 
 
 class Category(core.models.AbstractItem, core.models.AbstractName):

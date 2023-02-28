@@ -1,9 +1,9 @@
 import re
 
+import core.utils
+
 import django.core.exceptions
 import django.utils.deconstruct
-
-import core.utils
 
 
 @django.utils.deconstruct.deconstructible
