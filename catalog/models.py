@@ -1,8 +1,7 @@
-import django.core.validators
-import django.db.models
-
 import core.models
 
+import django.core.validators
+import django.db.models
 from django.utils.safestring import mark_safe
 
 from sorl.thumbnail import get_thumbnail
