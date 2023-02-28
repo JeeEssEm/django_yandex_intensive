@@ -50,6 +50,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'django_cleanup.apps.CleanupConfig',
     'sorl.thumbnail',
+    'tinymce',
     'debug_toolbar',
 ]
 

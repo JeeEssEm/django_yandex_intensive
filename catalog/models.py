@@ -1,3 +1,5 @@
+from tinymce.models import HTMLField
+
 import core.models
 
 import django.core.validators
@@ -7,6 +9,7 @@ from django.utils.safestring import mark_safe
 from sorl.thumbnail import get_thumbnail
 
 from . import validators
+import core.utils
 
 
 class Category(core.models.AbstractItem, core.models.AbstractName):
@@ -32,8 +35,8 @@ class Tag(core.models.AbstractItem, core.models.AbstractName):
 
 
 class Item(core.models.AbstractItem):
-    text = django.db.models.TextField(
-        'Описание',
+    text = HTMLField(
+        'описание',
         validators=[
             validators.ValidateMustContain('превосходно', 'роскошно'),
         ],
@@ -47,27 +50,31 @@ class Item(core.models.AbstractItem):
 
     tags = django.db.models.ManyToManyField(Tag)
 
-    def get_main_image(self):
+    def get_image_thumb(self):
         if self.main_image is not None:
-            return self.main_image.image_thumb()
+            crop_img = get_thumbnail(
+                self.main_image,
+                '300x300',
+                crop='center',
+                quality=51
+            )
+            return mark_safe(
+                f'<img src="{crop_img.url}" width=50>'
+            )
         return 'Нет изображения'
 
-    get_main_image.short_description = 'превью'
-    get_main_image.allow_tags = True
+    get_image_thumb.short_description = 'превью'
+    get_image_thumb.allow_tags = True
 
     class Meta:
         verbose_name_plural = 'товары'
         verbose_name = 'товар'
 
     def __str__(self):
-        return self.text[:15]
+        return core.utils.remove_html_tags(self.text)[:15]
 
 
-class Image(django.db.models.Model):
-    image = django.db.models.ImageField(
-        'Прикрепите изображение',
-        upload_to='catalog/',
-    )
+class Image(core.models.AbstractImage):
     item = django.db.models.OneToOneField(
         to=Item,
         on_delete=django.db.models.deletion.CASCADE,
@@ -75,55 +82,13 @@ class Image(django.db.models.Model):
         verbose_name='товар'
     )
 
-    class Meta:
-        verbose_name = 'изображение'
-        verbose_name_plural = 'изображения'
 
-    def get_image_x1280(self):
-        return get_thumbnail(self.image, '1280', quality=51)
-
-    def get_image_300x300(self):
-        return get_thumbnail(self.image, '300x300', crop='center', quality=51)
-
-    def image_thumb(self):
-        if self.image:
-            return mark_safe(
-                f'<img src="{self.get_image_300x300().url}" width=50>'
-            )
-        return 'Нет изображения'
-
-    image_thumb.short_description = 'превью'
-    image_thumb.allow_tags = True
-
-    def __str__(self):
-        return self.image.url
-
-
-class Gallery(django.db.models.Model):
-    image = django.db.models.ImageField(
-        'Прикрепите изображение',
-        upload_to='catalog/',
-        null=True,
-    )
+class Gallery(core.models.AbstractImage):
     item = django.db.models.ForeignKey(
         to=Item,
         on_delete=django.db.models.deletion.CASCADE,
         verbose_name='товар'
     )
-
-    class Meta:
-        verbose_name_plural = 'галереи'
-        verbose_name = 'галерея'
-
-    def get_image_300x300(self):
-        return get_thumbnail(self.image, '300x300', crop='center', quality=51)
-
-    def image_thumb(self):
-        if self.image:
-            return mark_safe(
-                f'<img src="{self.get_image_300x300().url}" width=50>'
-            )
-        return 'Нет изображения'
 
     def __str__(self):
         return self.image.url

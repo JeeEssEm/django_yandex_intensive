@@ -3,6 +3,8 @@ import re
 import django.core.exceptions
 import django.utils.deconstruct
 
+import core.utils
+
 
 @django.utils.deconstruct.deconstructible
 class ValidateMustContain:
@@ -10,6 +12,8 @@ class ValidateMustContain:
         self._perfect_words = perfect_words
 
     def __call__(self, val):
+        val = core.utils.remove_html_tags(val)
+
         if not any(bool(re.match(rf'\b{word}\b', val)) for word
                    in self._perfect_words):
             raise django.core.exceptions.ValidationError(
