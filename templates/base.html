@@ -1,5 +1,6 @@
+{% load static %}
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="w-100">
     <head>
         <meta charset="UTF-8"/>
         <meta name="description" content="some_linting_shit"/>
@@ -15,8 +16,8 @@
                 {% endif %}
             {% endwith %}
         </title>
-        {% load static %}
         <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}"/>
+        <link rel="stylesheet" href="{% static 'css/styles.css' %}"/>
         <link rel="apple-touch-icon"
               sizes="180x180"
               href="{% static 'favicons/apple-touch-icon.png' %}"/>
@@ -35,9 +36,9 @@
         <meta name="msapplication-TileColor" content="#da532c"/>
         <meta name="theme-color" content="#ffffff"/>
     </head>
-    <body>
+    <body class="min-vh-100 m-0 d-flex flex-column">
         {% include "includes/header.html" %}
-        <main>
+        <main class="page__main">
             {% block content %}{% endblock content %}
         </main>
         {% include "includes/footer.html" %}

@@ -39,6 +39,7 @@ REVERSE_REQUEST = os.environ.get('REVERSE_REQUEST', default='True') == 'True'
 # Application definition
 
 INSTALLED_APPS = [
+    'translations',
     'homepage.apps.HomepageConfig',
     'about.apps.AboutConfig',
     'catalog.apps.CatalogConfig',
@@ -57,6 +58,7 @@ INSTALLED_APPS = [
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'django.middleware.locale.LocaleMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -131,9 +133,16 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'ru'
 
+LANGUAGES = (
+    ('ru', 'Russian'),
+    ('en', 'English'),
+)
+
 TIME_ZONE = 'UTC'
 
 USE_I18N = True
+
+USE_L10N = True
 
 USE_TZ = True
 
@@ -152,4 +161,9 @@ STATICFILES_DIRS = [
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 MEDIA_ROOT = BASE_DIR / 'media'
-MEDIA_URL = 'media/'
+
+MEDIA_URL = '/media/'
+
+LOCALE_PATHS = [
+    BASE_DIR / 'locale',
+]

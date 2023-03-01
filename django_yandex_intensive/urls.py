@@ -13,30 +13,33 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
+from django.conf.urls.i18n import i18n_patterns
 from django.conf.urls.static import static
 from django.contrib import admin
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 from django.urls import include, path
 
+
 from . import settings
 
-urlpatterns = [
+urlpatterns = i18n_patterns(
     path('admin/', admin.site.urls),
     path('', include('homepage.urls')),
     path('catalog/', include('catalog.urls')),
     path('about/', include('about.urls')),
     path('tinymce/', include('tinymce.urls')),
-]
+    prefix_default_language=False
+)
 
 if settings.DEBUG:
     import debug_toolbar
 
     urlpatterns += (path('__debug__/', include(debug_toolbar.urls)),)
 
-if hasattr(settings, 'MEDIA_ROOT'):
-    urlpatterns += static(
-        settings.MEDIA_URL,
-        document_root=settings.MEDIA_ROOT
-    )
-else:
-    urlpatterns += staticfiles_urlpatterns()
+    if hasattr(settings, 'MEDIA_ROOT'):
+        urlpatterns += static(
+            settings.MEDIA_URL,
+            document_root=settings.MEDIA_ROOT
+        )
+    else:
+        urlpatterns += staticfiles_urlpatterns()

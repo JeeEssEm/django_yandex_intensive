@@ -1,4 +1,5 @@
 {% load static %}
+{% load i18n %}
 <div class="container">
     <header class="d-flex flex-wrap justify-content-center py-3 mb-4 border-bottom">
         <a href="{% url 'homepage:home' %}"
@@ -9,15 +10,15 @@
             {% with request.resolver_match.view_name as view_name %}
                 <li class="nav-item">
                     <a href="{% url 'homepage:home' %}"
-                       class="nav-link {% if view_name == 'homepage:home' %}active{% endif %}">На главную</a>
+                       class="nav-link {% if view_name == 'homepage:home' %}active{% endif %}">{% trans "На главную" %}</a>
                 </li>
                 <li class="nav-item">
                     <a href="{% url 'catalog:item_list' %}"
-                       class="nav-link {% if view_name == 'catalog:item_list' %}active{% endif %}">Список товаров</a>
+                       class="nav-link {% if view_name == 'catalog:item_list' %}active{% endif %}">{% trans "Список товаров" %}</a>
                 </li>
                 <li class="nav-item">
                     <a href="{% url 'about:about' %}"
-                       class="nav-link {% if view_name == 'about:about' %}active{% endif %}">О проекте</a>
+                       class="nav-link {% if view_name == 'about:about' %}active{% endif %}">{% trans "О проекте" %}</a>
                 </li>
             {% endwith %}
         </ul>

@@ -1,0 +1,18 @@
+<footer class="d-flex flex-wrap justify-content-between align-items-center py-3 my-4 border-top ms-4">
+    <h1>Текущая дата: <strong id="date">{% now "Y" %} </strong></h1>
+</footer>
+
+<script lang="text/javascript">
+    let dateField = document.getElementById('date');
+    let nowDate = new Date();
+
+    let serverTime = Date.parse('{% now "Y-m-d G:i:s" %}');
+    let clientTime = nowDate.getTime()
+
+    if (Math.abs(clientTime - serverTime) > 24 * 60 * 60 * 1000) {
+        dateField.innerHTML = '{% now "Y" %}';
+    }
+    else {
+        dateField.innerHTML = nowDate.getFullYear();
+    }
+</script>

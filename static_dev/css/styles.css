@@ -1,0 +1,6 @@
+.page__main {
+    flex: 1;
+    display: flex;
+    align-content: center;
+    flex-direction: column;
+}
