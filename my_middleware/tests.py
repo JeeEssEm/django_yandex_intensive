@@ -59,6 +59,6 @@ class MiddlewareTest(TestCase):
 
     def test_not_russian(self):
         client = Client()
-        response = get_nth_page(client, 10, '')
+        response = get_nth_page(client, 10, '/about/')
         rs = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit,'
         self.assertContains(response, rs)

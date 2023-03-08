@@ -12,12 +12,6 @@ class StaticUrlTest(TestCase):
         self.assertEqual(response.status_code, 200)
 
     def test_catalog_item(self):
-        correct = [
-            ('1', 200),
-            ('123123123123', 200),
-            ('0', 200),
-            ('123#', 200),
-        ]
         fail_test_numbers = [
             ('123asd', 404),
             ('-1', 404),
@@ -30,7 +24,7 @@ class StaticUrlTest(TestCase):
             ('catalog/1', 404),
             ('$#@', 404),
         ]
-        cases = fail_test_strings + fail_test_numbers + correct
+        cases = fail_test_strings + fail_test_numbers
         for case, status in cases:
             with self.subTest(f'Test case: {case}, expected: {status}'):
                 response = Client().get(f'/catalog/{case}')
@@ -299,3 +293,114 @@ class ModelsTests(TestCase):
         self.tag.save()
 
         self.assertEqual(models.Tag.objects.count(), tag_count + 1)
+
+
+class TemplatesTests(TestCase):
+    fixtures = ['tag_fixture.json', 'category_fixture.json']
+
+    @classmethod
+    def setUpTestData(cls):
+        cls.tags = models.Tag.objects.all()
+        cls.items = models.Item.objects.all()
+        cls.categories = models.Category.objects.all()
+
+    @classmethod
+    def tearDownClass(cls):
+        cls.tags.delete()
+        cls.items.delete()
+        cls.categories.delete()
+
+    def test_is_published_item(self):
+        self.item = models.Item(
+            name='some name',
+            category=self.categories[0],
+            text='превосходно',
+            is_published=False
+        )
+        self.item.full_clean()
+        self.item.save()
+        self.item.tags.add(self.tags[0])
+
+        response = Client().get('/catalog/')
+        self.assertNotContains(response, 'some name')
+
+    def test_is_published_category(self):
+        self.cat = models.Category(
+            name='test',
+            slug='some-correct-slug',
+            weight=100,
+            is_published=False
+        )
+        self.cat.full_clean()
+        self.cat.save()
+
+        self.item = models.Item(
+            name='some name',
+            category=self.cat,
+            text='превосходно',
+            is_published=False
+        )
+        self.item.full_clean()
+        self.item.save()
+        self.item.tags.add(self.tags[0])
+
+        response = Client().get('/catalog/')
+        self.assertNotContains(response, 'some name')
+
+    def test_item_has_name_tags_desc(self):
+        name = 'название'
+        text = 'превосходно написанный текст'
+        self.item = models.Item(
+            name=name,
+            category=self.categories[0],
+            text=text
+        )
+        self.item.full_clean()
+        self.item.save()
+        self.item.tags.add(self.tags[0])
+        self.item.tags.add(self.tags[1])
+
+        response = Client().get('/catalog/')
+        contains = [
+            name, text, self.tags[0].name,
+            self.tags[1].name, self.categories[0].name
+        ]
+        for element in contains:
+            with self.subTest(f'Should contain: {element}'):
+                self.assertContains(response, element)
+
+    def test_hidden_tags_on_item(self):
+        tag_name = 'test'
+        self.tag = models.Tag(
+            name=tag_name,
+            slug='slug',
+            is_published=False
+        )
+        self.tag.full_clean()
+        self.tag.save()
+
+        self.item = models.Item(
+            name='name',
+            category=self.categories[0],
+            text='превосходно написанный текст'
+        )
+        self.item.full_clean()
+        self.item.save()
+        self.item.tags.add(self.tag)
+
+        response = Client().get('/catalog/')
+        self.assertNotContains(response, tag_name)
+
+    def test_truncate_description(self):
+        txt = 'превосходно написанный текст '
+        self.item = models.Item(
+            name='name',
+            category=self.categories[0],
+            text=txt + 'слова ' * 10
+        )
+        self.item.full_clean()
+        self.item.save()
+        self.item.tags.add(self.tags[0])
+
+        response = Client().get('/catalog/')
+        self.assertContains(response, txt + 'слова ' * 7 + '…')

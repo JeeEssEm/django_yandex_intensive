@@ -1,9 +1,26 @@
 {% block content %}
     {% load static %}
-    <div class="card shadow-sm">
-        <img src="{{ MEDIA_URL }}/kote.jpg" alt="котек затычка" width="auto" height="auto"/>
+    {% load thumbnail %}
+    <div class="card shadow-sm h-100">
+        {% thumbnail item.main_image.image "300x300" crop="center" as img %}
+            <img src="{{ MEDIA_URL }}/{{ img }}" alt="Нет изображения"/>
+        {% empty %}
+            <img src="{{ MEDIA_URL }}/empty.png" alt="Вообще нет изображения"/>
+        {% endthumbnail %}
         <div class="card-body">
-            <p class="card-text">товар №{{ item }}</p>
+            <h5 class="card-title">{{ item.name }}</h5>
+            <p class="text-muted">{{ item.category.name }}</p>
+            <p class="card-text">
+                {{ item.text|striptags|truncatewords:10 }}
+            </p>
+            <ul>
+                {% for tag in item.tags.all %}
+                    <li>{{ tag }}</li>
+                {% endfor %}
+            </ul>
+            <a href="{% url 'catalog:item_detail' item.id %}" class="text-decoration-none">
+                <button class="btn btn-primary">Перейти</button>
+            </a>
         </div>
     </div>
 {% endblock content %}

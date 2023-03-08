@@ -41,6 +41,10 @@ class Item(core.models.AbstractItem):
             validators.ValidateMustContain('превосходно', 'роскошно'),
         ],
     )
+    is_on_main = django.db.models.BooleanField(
+        'На главной странице',
+        default=False
+    )
 
     category = django.db.models.ForeignKey(
         to=Category,
@@ -51,9 +55,9 @@ class Item(core.models.AbstractItem):
     tags = django.db.models.ManyToManyField(Tag)
 
     def get_image_thumb(self):
-        if self.main_image is not None:
+        if hasattr(self, 'main_image'):
             crop_img = get_thumbnail(
-                self.main_image,
+                self.main_image.image,
                 '300x300',
                 crop='center',
                 quality=51
@@ -71,7 +75,7 @@ class Item(core.models.AbstractItem):
         verbose_name = 'товар'
 
     def __str__(self):
-        return core.utils.remove_html_tags(self.text)[:15]
+        return core.utils.remove_html_tags(self.text)
 
 
 class Image(core.models.AbstractImage):
@@ -87,6 +91,7 @@ class Gallery(core.models.AbstractImage):
     item = django.db.models.ForeignKey(
         to=Item,
         on_delete=django.db.models.deletion.CASCADE,
+        related_name='gallery',
         verbose_name='товар'
     )
 

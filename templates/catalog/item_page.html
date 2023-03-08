@@ -1,4 +1,56 @@
 {% extends "base.html" %}
+
 {% block content %}
-    <div class="container w-50 d-flex justify-content-center">{% include "catalog/includes/item_card.html" %}</div>
+    {% load static %}
+    {% load thumbnail %}
+    <div class="container border rounded p-5">
+        <p class="text-muted mb-0">{{ item.category.name }}</p>
+        <h2 class="card-title">{{ item.name }}</h2>
+        <div class="row mt-3">
+            <div class="col-4">
+                {% thumbnail item.main_image.image "300x300" crop="center" as img %}
+                    <img src="{{ MEDIA_URL }}/{{ img }}" alt="Нет изображения" class="rounded border"/>
+                {% empty %}
+                    <img src="{{ MEDIA_URL }}/empty.png" alt="Вообще нет изображения" class="rounded border"/>
+                {% endthumbnail %}
+            </div>
+            <div class="col-8">
+                <div class="border rounded mb-3 p-2">
+                    <h5>Описание</h5>
+                    <p>{{ item.text|striptags }}</p>
+                </div>
+                <div class="border rounded mb-3 p-2">
+                    <h5>Теги</h5>
+                    <ul>
+                        {% for tag in item.tags.all %}
+                            <li>{{ tag }}</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+                <div class="border rounded p-2">
+                    <h5 class="mb-2">Галерея</h5>
+                    <div class="carousel slide w-100" id="myCarousel">
+                        <div class="carousel-inner">
+                            {% for image in item.gallery.all %}
+                                <div class="carousel-item {% if forloop.first %}active{% endif %}">
+                                    {% thumbnail image.image "500x500" as gallery %}
+                                        <img src="{{ gallery.url }}" class="w-100"/>
+                                    {% endthumbnail %}
+                                </div>
+                            {% endfor %}
+                        </div>
+                        <button class="carousel-control-prev" type="button" data-bs-target="#myCarousel" data-bs-slide="prev">
+                            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                            <span class="visually-hidden">Previous</span>
+                        </button>
+                        <button class="carousel-control-next" type="button" data-bs-target="#myCarousel" data-bs-slide="next">
+                          <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                          <span class="visually-hidden">Next</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+<script src="{% static 'js/bootstrap.bundle.min.js' %}"></script>
 {% endblock content %}
