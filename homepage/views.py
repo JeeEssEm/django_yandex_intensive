@@ -1,5 +1,6 @@
 from http import HTTPStatus
 
+
 from catalog import models
 
 import django.db.models
@@ -16,8 +17,11 @@ def home(request):
     ).prefetch_related(
         django.db.models.Prefetch(
             'tags',
-            queryset=models.Tag.objects.filter(is_published=True)
-        )
+            queryset=models.Tag.objects.filter(is_published=True).only('name')
+        ),
+    ).select_related(
+        'category',
+        'main_image'
     ).only(
         'id',
         'name',

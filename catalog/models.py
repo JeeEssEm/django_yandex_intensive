@@ -42,7 +42,7 @@ class Item(core.models.AbstractItem):
         ],
     )
     is_on_main = django.db.models.BooleanField(
-        'На главной странице',
+        'на главной странице',
         default=False
     )
 

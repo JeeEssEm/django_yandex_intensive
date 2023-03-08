@@ -11,7 +11,7 @@
             <h5 class="card-title">{{ item.name }}</h5>
             <p class="text-muted">{{ item.category.name }}</p>
             <p class="card-text">
-                {{ item.text|striptags|truncatewords:10 }}
+                {{ item.text|safe|truncatewords:10 }}
             </p>
             <ul>
                 {% for tag in item.tags.all %}
