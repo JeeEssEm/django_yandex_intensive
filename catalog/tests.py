@@ -301,13 +301,11 @@ class TemplatesTests(TestCase):
     @classmethod
     def setUpTestData(cls):
         cls.tags = models.Tag.objects.all()
-        cls.items = models.Item.objects.all()
         cls.categories = models.Category.objects.all()
 
     @classmethod
     def tearDownClass(cls):
         cls.tags.delete()
-        cls.items.delete()
         cls.categories.delete()
 
     def test_is_published_item(self):
@@ -404,3 +402,34 @@ class TemplatesTests(TestCase):
 
         response = Client().get('/catalog/')
         self.assertContains(response, txt + 'слова ' * 7 + '…')
+
+    def test_catalog_contain_extra_field(self):
+        self.item = models.Item(
+            name='name',
+            category=self.categories[0],
+            text='превосходно написанный текст'
+        )
+        self.item.full_clean()
+        self.item.save()
+        self.item.tags.add(self.tags[0])
+
+        category_extra_fields = ['weight', 'slug', 'is_published']
+        item_extra_fields = ['is_published', 'gallery']
+
+        extra_fields = {
+            models.Category: category_extra_fields,
+            models.Item: item_extra_fields,
+        }
+
+        response = Client().get('/catalog/')
+        loaded_fields = (
+            response.context['items'].query.get_loaded_field_names()
+        )
+        for model, field_list in extra_fields.items():
+            for extra_field in field_list:
+                with self.subTest(f'Test {model} should not contain'
+                                  f' {extra_field}'):
+                    self.assertNotIn(
+                        extra_field,
+                        loaded_fields[model]
+                    )
