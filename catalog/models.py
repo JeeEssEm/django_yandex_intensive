@@ -9,6 +9,7 @@ from sorl.thumbnail import get_thumbnail
 
 from tinymce.models import HTMLField
 
+from . import managers
 from . import validators
 
 
@@ -35,6 +36,8 @@ class Tag(core.models.AbstractItem, core.models.AbstractName):
 
 
 class Item(core.models.AbstractItem):
+    objects = managers.ItemManager()
+
     text = HTMLField(
         'описание',
         validators=[

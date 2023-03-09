@@ -3,32 +3,13 @@ from http import HTTPStatus
 
 from catalog import models
 
-import django.db.models
 from django.http import HttpResponse
 from django.shortcuts import render
 
 
 def home(request):
     template = 'homepage/home.html'
-    items = models.Item.objects.filter(
-        is_on_main=True,
-        is_published=True,
-        category__is_published=True
-    ).prefetch_related(
-        django.db.models.Prefetch(
-            'tags',
-            queryset=models.Tag.objects.filter(is_published=True).only('name')
-        ),
-    ).select_related(
-        'category',
-        'main_image'
-    ).only(
-        'id',
-        'name',
-        'text',
-        'category__name',
-        'main_image__image',
-    ).order_by('name')
+    items = models.Item.objects.homepage()
 
     context = {
         'items': items

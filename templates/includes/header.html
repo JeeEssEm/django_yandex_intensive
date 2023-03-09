@@ -4,7 +4,10 @@
     <header class="d-flex flex-wrap justify-content-center py-3 mb-4 border-bottom">
         <a href="{% url 'homepage:home' %}"
            class="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-dark text-decoration-none">
-            <img src="{% static 'images/logo.png' %}" alt="лого" height="100%" width="auto"/>
+            <img src="{% static 'images/logo.png' %}"
+                 alt="лого"
+                 height="100%"
+                 width="auto"/>
         </a>
         <ul class="nav nav-pills">
             {% with request.resolver_match.view_name as view_name %}

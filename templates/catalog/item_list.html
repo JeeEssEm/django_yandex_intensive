@@ -5,12 +5,14 @@
         <h1>Страница с товарами</h1>
     </section>
     <div class="container">
-        <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
-            {% for item in items %}
-                <div class="col">
-                    {% include "includes/item_card.html" %}
-                </div>
-            {% endfor %}
-        </div>
+        {% regroup items by category as categories %}
+        {% for cat in categories %}
+            <h2 class="pb-2 border-bottom">{{ cat.grouper }}</h2>
+            <div class="container px-4 py-5 row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
+                {% for item in cat.list %}
+                    <div class="col">{% include "includes/item_card.html" %}</div>
+                {% endfor %}
+            </div>
+        {% endfor %}
     </div>
 {% endblock content %}

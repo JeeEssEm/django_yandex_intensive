@@ -3,24 +3,25 @@
     {% load thumbnail %}
     <div class="card shadow-sm h-100">
         {% thumbnail item.main_image.image "300x300" crop="center" as img %}
-            <img src="{{ MEDIA_URL }}/{{ img }}" alt="Нет изображения"/>
-        {% empty %}
-            <img src="{{ MEDIA_URL }}/empty.png" alt="Вообще нет изображения"/>
-        {% endthumbnail %}
-        <div class="card-body">
-            <h5 class="card-title">{{ item.name }}</h5>
-            <p class="text-muted">{{ item.category.name }}</p>
-            <p class="card-text">
-                {{ item.text|safe|truncatewords:10 }}
-            </p>
-            <ul>
-                {% for tag in item.tags.all %}
-                    <li>{{ tag }}</li>
-                {% endfor %}
-            </ul>
-            <a href="{% url 'catalog:item_detail' item.id %}" class="text-decoration-none">
-                <button class="btn btn-primary">Перейти</button>
-            </a>
-        </div>
+        <img src="{{ MEDIA_URL }}/{{ img }}" alt="Нет изображения"/>
+    {% empty %}
+        <img src="{{ MEDIA_URL }}/empty.png" alt="Вообще нет изображения"/>
+    {% endthumbnail %}
+    <div class="card-body">
+        <h5 class="card-title">{{ item.name }}</h5>
+        <p class="text-muted">{{ item.category.name }}</p>
+        <p class="card-text">{{ item.text|safe|truncatewords:10 }}</p>
+        <ul class="list-unstyled d-flex justify-content-flex-start">
+            {% for tag in item.tags.all %}
+                <li class="me-1">
+                    <span class="badge rounded text-bg-secondary">{{ tag }}</span>
+                </li>
+            {% endfor %}
+        </ul>
+        <a href="{% url 'catalog:item_detail' item.id %}"
+           class="text-decoration-none">
+            <button class="btn btn-primary">Перейти</button>
+        </a>
     </div>
+</div>
 {% endblock content %}
