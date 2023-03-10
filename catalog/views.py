@@ -1,4 +1,5 @@
 from datetime import date, timedelta
+from random import sample
 
 from catalog import models
 
@@ -44,9 +45,12 @@ def new_items(request):
     items = models.Item.objects.published().filter(
         created_at__gte=delta
     )
+    length = len(items)
+    if length > 5:
+        length = 5
 
     context = {
-        'items': items,
+        'items': sample(list(items), k=length),
         'title': 'Новинки'
     }
 
