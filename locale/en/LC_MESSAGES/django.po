@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-03-01 18:01+0300\n"
+"POT-Creation-Date: 2023-03-10 23:05+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,14 +18,34 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: .\templates\includes\header.html:13
+#: .\templates\includes\header.html:17
 msgid "На главную"
 msgstr "Home"
 
-#: .\templates\includes\header.html:17
+#: .\templates\includes\header.html:25
+msgid "Каталог"
+msgstr "Catalog"
+
+#: .\templates\includes\header.html:30
 msgid "Список товаров"
 msgstr "Catalog"
 
-#: .\templates\includes\header.html:21
+#: .\templates\includes\header.html:34
+msgid "Новинки"
+msgstr "Novelty"
+
+#: .\templates\includes\header.html:38
+msgid "Пятница"
+msgstr "Friday"
+
+#: .\templates\includes\header.html:42
+msgid "Непроверенные"
+msgstr "Unchecked"
+
+#: .\templates\includes\header.html:49
 msgid "О проекте"
 msgstr "About"
+
+#: .\templates\includes\header.html:54
+msgid "Админ панель"
+msgstr "Admin"

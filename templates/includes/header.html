@@ -1,7 +1,7 @@
 {% load static %}
 {% load i18n %}
 <div class="container">
-    <header class="d-flex flex-wrap justify-content-center py-3 mb-4 border-bottom">
+    <header class="d-flex flex-wrap justify-content-center py-3 mb-4 border-bottom">3 <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}"/>
         <a href="{% url 'homepage:home' %}"
            class="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-dark text-decoration-none">
             <img src="{% static 'images/logo.png' %}"
@@ -16,8 +16,32 @@
                        class="nav-link {% if view_name == 'homepage:home' %}active{% endif %}">{% trans "На главную" %}</a>
                 </li>
                 <li class="nav-item">
-                    <a href="{% url 'catalog:item_list' %}"
-                       class="nav-link {% if view_name == 'catalog:item_list' %}active{% endif %}">{% trans "Список товаров" %}</a>
+                    <div class="dropdown">
+                        <button class="btn dropdown-toggle {% if view_name in 'catalog:item_list,catalog:novelty,catalog:friday,catalog:unchecked' %}btn-primary{% endif %}" type="button" role="button"
+                                data-bs-toggle="dropdown"
+                                aria-expanded="false"
+                        >
+                            {% trans "Каталог" %}
+                        </button>
+                        <ul class="dropdown-menu">
+                            <li>
+                                <a href="{% url 'catalog:item_list' %}"
+                                   class="dropdown-item {% if view_name == 'catalog:item_list' %}active{% endif %}">{% trans "Список товаров" %}</a>
+                            </li>
+                            <li>
+                                <a href="{% url 'catalog:novelty' %}"
+                                   class="dropdown-item {% if view_name == 'catalog:novelty' %}active{% endif %}">{% trans "Новинки" %}</a>
+                            </li>
+                            <li>
+                                <a href="{% url 'catalog:friday' %}"
+                                   class="dropdown-item {% if view_name == 'catalog:friday' %}active{% endif %}">{% trans "Пятница" %}</a>
+                            </li>
+                            <li>
+                                <a href="{% url 'catalog:unchecked' %}"
+                                   class="dropdown-item {% if view_name == 'catalog:unchecked' %}active{% endif %}">{% trans "Непроверенные" %}</a>
+                            </li>
+                        </ul>
+                    </div>
                 </li>
                 <li class="nav-item">
                     <a href="{% url 'about:about' %}"
@@ -26,7 +50,8 @@
             {% endwith %}
         </ul>
         {% if user.is_superuser %}
-            <a href="/admin"><button class="btn btn-danger">В админ панель</button></a>
+            <a href="{% url 'admin:index' %}"><button class="btn btn-danger">{% trans "Админ панель" %}</button></a>
         {% endif %}
+        <script src="{% static 'js/bootstrap.bundle.min.js' %}"></script>
     </header>
 </div>

@@ -12,7 +12,8 @@ def item_list(request):
     items = models.Item.objects.catalog()
 
     context = {
-        'items': items
+        'items': items,
+        'title': 'Страница с товарами'
     }
 
     return render(request, template, context)
@@ -37,7 +38,7 @@ def positive_integer(request, pk):
 
 
 def new_items(request):
-    template = 'includes/items_template.html'
+    template = 'catalog/item_list.html'
     delta = date.today() - timedelta(days=7)
 
     items = models.Item.objects.published().filter(
@@ -45,40 +46,42 @@ def new_items(request):
     )
 
     context = {
-        'items': items
+        'items': items,
+        'title': 'Новинки'
     }
-    print(items)
 
     return render(request, template, context)
 
 
 def friday(request):
-    template = 'includes/items_template.html'
-    delta = date.today() - timedelta(days=7)
+    template = 'catalog/item_list.html'
 
     items = models.Item.objects.published().filter(
-        created_at__gte=delta
-    )
+        created_at__iso_week_day=5
+    ).order_by('-updated_at')[:5]
 
     context = {
-        'items': items
+        'items': items,
+        'title': 'Пятница'
     }
-    print(items)
 
     return render(request, template, context)
 
 
 def no_changes(request):
-    template = 'includes/items_template.html'
+    template = 'catalog/item_list.html'
 
     items = models.Item.objects.published().filter(
-        created_at=django.db.models.F('updated_at')
+        created_at__date=django.db.models.F('updated_at__date'),
+        created_at__hour=django.db.models.F('updated_at__hour'),
+        created_at__minute=django.db.models.F('updated_at__minute'),
+        created_at__second=django.db.models.F('updated_at__second')
     )
 
     context = {
-        'items': items
+        'items': items,
+        'title': 'Непроверенное'
     }
-    print(items)
 
     return render(request, template, context)
 

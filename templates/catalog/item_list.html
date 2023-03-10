@@ -2,7 +2,7 @@
 {% block content %}
     {% load static %}
     <section class="container text-center py-5">
-        <h1>Страница с товарами</h1>
+        <h1>{{ title }}</h1>
     </section>
     <div class="container">
         {% regroup items by category as categories %}
