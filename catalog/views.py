@@ -1,10 +1,10 @@
-from catalog import models
-
 from datetime import date, timedelta
 
+from catalog import models
+
+import django.db.models
 from django.http import HttpResponse
 from django.shortcuts import get_object_or_404, render
-import django.db.models
 
 
 def item_list(request):
@@ -84,4 +84,3 @@ def no_changes(request):
     }
 
     return render(request, template, context)
-
