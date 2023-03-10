@@ -61,7 +61,7 @@ def friday(request):
     template = 'catalog/item_list.html'
 
     items = models.Item.objects.published().filter(
-        created_at__iso_week_day=5
+        updated_at__iso_week_day=5
     ).order_by('-updated_at')[:5]
 
     context = {
