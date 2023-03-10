@@ -25,5 +25,8 @@
                 </li>
             {% endwith %}
         </ul>
+        {% if user.is_superuser %}
+            <a href="/admin"><button class="btn btn-danger">В админ панель</button></a>
+        {% endif %}
     </header>
 </div>

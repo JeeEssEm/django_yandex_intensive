@@ -38,6 +38,9 @@ class Tag(core.models.AbstractItem, core.models.AbstractName):
 class Item(core.models.AbstractItem):
     objects = managers.ItemManager()
 
+    created_at = django.db.models.DateTimeField(auto_now_add=True)
+    updated_at = django.db.models.DateTimeField(auto_now=True)
+
     text = HTMLField(
         'описание',
         validators=[

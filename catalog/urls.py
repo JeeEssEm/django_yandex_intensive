@@ -11,4 +11,6 @@ urlpatterns = [
     path('<int:el>', views.item_detail, name='item_detail'),
     re_path(r'^re/(?P<pk>[1-9]\d*)$', views.positive_integer),
     path('converter/<positive_int:pk>', views.positive_integer),
+    path('test', views.new_items, name='new_items'),
+    path('changes', views.no_changes, name='new_items'),
 ]

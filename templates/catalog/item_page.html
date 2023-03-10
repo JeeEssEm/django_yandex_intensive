@@ -8,9 +8,14 @@
         <div class="row mt-3">
             <div class="col-4">
                 {% thumbnail item.main_image.image "300x300" crop="center" as img %}
-                <img src="{{ MEDIA_URL }}/{{ img }}"
-                     alt="Нет изображения"
-                     class="rounded border"/>
+                <div class="d-flex flex-column">
+                    <img src="{{ MEDIA_URL }}/{{ img }}"
+                         alt="Нет изображения"
+                         class="rounded border"/>
+                    <a href="{{ MEDIA_URL }}/{{ item.main_image.image }}" download>
+                        <button class="btn btn-primary w-100 mt-1">скачать</button>
+                    </a>
+                </div>
             {% empty %}
                 <img src="{{ MEDIA_URL }}/empty.png"
                      alt="Вообще нет изображения"
@@ -35,7 +40,12 @@
                         {% for image in item.gallery.all %}
                             <div class="carousel-item {% if forloop.first %}active{% endif %}">
                                 {% thumbnail image.image "500x500" as gallery %}
-                                <img src="{{ gallery.url }}" class="w-100"/>
+                                <div>
+                                    <img src="{{ gallery.url }}" class="w-100"/>
+                                    <a href="{{ MEDIA_URL }}/{{ image.image }}" download>
+                                        <button class="btn btn-primary w-100 mt-1">скачать</button>
+                                    </a>
+                                </div>
                             {% endthumbnail %}
                         </div>
                     {% endfor %}
