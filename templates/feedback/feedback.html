@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% block title %}
+    Форма обратной связи
+{% endblock title %}
+
+{% block content %}
+    <form method="post" class="form-control w-50 m-auto p-3">
+        {% csrf_token %}
+        <h3 class="mb-3">Форма обратной связи</h3>
+        {% for field in form.visible_fields %}
+            <div class="mb-3">
+                {% for error in field.errors %}
+                    <div class="alert alert-danger">
+                        {{ error|escape }}
+                    </div>
+                {% endfor %}
+                <label for="{{ field.auto_id }}" class="form-label">
+                    {{ field.label }}
+                </label>
+                {{ field }}
+                {% if field.help_text %}
+                    <p class="text-muted">{{ field.help_text|safe }}</p>
+                {% endif %}
+            </div>
+        {% endfor %}
+        {% for error in form.non_field_errors %}
+           <div class="alert alert-danger">
+               {{ error|escape }}
+           </div>
+        {% endfor %}
+        <input type="submit" value="Отправить" class="btn btn-primary mb-3"/>
+    </form>
+{% endblock content %}

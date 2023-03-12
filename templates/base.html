@@ -6,15 +6,7 @@
         <meta name="description" content="some_linting_shit"/>
         <meta name="keywords" content="more_linting_shit"/>
         <title>
-            {% with request.resolver_match.view_name as view_name %}
-                {% if view_name == 'homepage:home' %}
-                    Главная
-                {% elif view_name == 'catalog:item_list' %}
-                    Каталог
-                {% elif view_name == 'about:about' %}
-                    О проекте
-                {% endif %}
-            {% endwith %}
+            {% block title %}{% endblock title %}
         </title>
         <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}"/>
         <link rel="stylesheet" href="{% static 'css/styles.css' %}"/>
@@ -43,5 +35,6 @@
             {% endblock content %}
         </main>
         {% include "includes/footer.html" %}
+        <script src="{% static 'js/bootstrap.bundle.min.js' %}"></script>
     </body>
 </html>

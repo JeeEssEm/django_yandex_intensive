@@ -1,7 +1,7 @@
 {% load static %}
 {% load i18n %}
 <div class="container">
-    <header class="d-flex flex-wrap justify-content-center py-3 mb-4 border-bottom">3 <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}"/>
+    <header class="d-flex flex-wrap justify-content-center py-3 mb-4 border-bottom">
         <a href="{% url 'homepage:home' %}"
            class="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-dark text-decoration-none">
             <img src="{% static 'images/logo.png' %}"
@@ -47,11 +47,17 @@
                     <a href="{% url 'about:about' %}"
                        class="nav-link {% if view_name == 'about:about' %}active{% endif %}">{% trans "О проекте" %}</a>
                 </li>
+                <li class="nav-item">
+                    <a href="{% url 'feedback:feedback' %}"
+                       class="nav-link {% if view_name == 'feedback:feedback' %}active{% endif %}">
+                        {% trans "Форма обратной связи" %}
+                    </a>
+                </li>
             {% endwith %}
         </ul>
         {% if user.is_superuser %}
             <a href="{% url 'admin:index' %}"><button class="btn btn-danger">{% trans "Админ панель" %}</button></a>
         {% endif %}
-        <script src="{% static 'js/bootstrap.bundle.min.js' %}"></script>
+
     </header>
 </div>

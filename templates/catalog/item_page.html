@@ -1,4 +1,8 @@
 {% extends "base.html" %}
+{% block title %}
+    {{ item.name }}
+{% endblock title %}
+
 {% block content %}
     {% load static %}
     {% load thumbnail %}
@@ -11,7 +15,10 @@
                 <div class="d-flex flex-column">
                     <img src="{{ MEDIA_URL }}/{{ img }}"
                          alt="Нет изображения"
-                         class="rounded border"/>
+                         class="rounded border"
+                         width="auto"
+                         height="auto"
+                    />
                     <a href="{{ MEDIA_URL }}/{{ item.main_image.image }}" download>
                         <button class="btn btn-primary w-100 mt-1">скачать</button>
                     </a>
@@ -19,6 +26,8 @@
             {% empty %}
                 <img src="{{ MEDIA_URL }}/empty.png"
                      alt="Вообще нет изображения"
+                     width="auto"
+                     height="auto"
                      class="rounded border"/>
             {% endthumbnail %}
         </div>
@@ -41,8 +50,9 @@
                             <div class="carousel-item {% if forloop.first %}active{% endif %}">
                                 {% thumbnail image.image "500x500" as gallery %}
                                 <div>
-                                    <img src="{{ gallery.url }}" class="w-100"/>
-                                    <a href="{{ MEDIA_URL }}/{{ image.image }}" download>
+                                    <img src="{{ gallery.url }}" class="w-100" alt="картинка"
+                                    width="auto" height="auto"/>
+                                    <a href="{{ MEDIA_URL }}/{{ image.image }}" download class="carousel-caption">
                                         <button class="btn btn-primary w-100 mt-1">скачать</button>
                                     </a>
                                 </div>
@@ -69,5 +79,4 @@
     </div>
 </div>
 </div>
-<script src="{% static 'js/bootstrap.bundle.min.js' %}"></script>
 {% endblock content %}
