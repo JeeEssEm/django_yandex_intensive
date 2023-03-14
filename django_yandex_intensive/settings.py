@@ -36,6 +36,8 @@ else:
 
 REVERSE_REQUEST = os.environ.get('REVERSE_REQUEST', default='True') == 'True'
 
+EMAIL_ADDRESS = os.environ.get('EMAIL_ADDRESS', default='receiver@athlon.amd')
+
 # Application definition
 
 INSTALLED_APPS = [

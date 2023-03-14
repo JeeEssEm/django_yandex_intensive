@@ -1,6 +1,8 @@
 from django.core.mail import send_mail
 from django.shortcuts import redirect, render
 
+from django_yandex_intensive import settings
+
 from . import forms
 
 
@@ -16,8 +18,8 @@ def feedback(request):
         send_mail(
             'Feedback',
             text,
-            email,
-            ['receiver@athlon.amd']
+            settings.EMAIL_ADDRESS,
+            [email]
         )
         return redirect('feedback:thanks')
 
