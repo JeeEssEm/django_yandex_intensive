@@ -12,6 +12,10 @@ class FormTest(TestCase):
     def setUpClass(cls):
         super().setUpClass()
         cls.form = forms.FeedBackForm()
+        cls.form_data = {
+            models.FeedBack.email.field.name: 'real@mail.not',
+            models.FeedBack.text.field.name: 'some text',
+        }
 
     @parameterized.expand([
         ('email', 'Email'),
@@ -34,13 +38,9 @@ class FormTest(TestCase):
         self.assertEquals(label, expected)
 
     def test_redirect(self):
-        form_data = {
-            models.FeedBack.email.field.name: 'real@mail.not',
-            models.FeedBack.text.field.name: 'some text',
-        }
         response = Client().post(
             reverse('feedback:feedback'),
-            data=form_data,
+            data=self.form_data,
             follow=True
         )
         self.assertRedirects(response, reverse('feedback:thanks'))
@@ -48,3 +48,12 @@ class FormTest(TestCase):
     def test_form_in_context(self):
         response = Client().get(reverse('feedback:feedback'))
         self.assertIn('form', response.context)
+
+    def test_db_form(self):
+        feedback_count = models.FeedBack.objects.count()
+        Client().post(
+            reverse('feedback:feedback'),
+            data=self.form_data,
+            follow=True
+        )
+        self.assertEqual(feedback_count + 1, models.FeedBack.objects.count())

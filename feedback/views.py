@@ -21,6 +21,7 @@ def feedback(request):
             settings.EMAIL_ADDRESS,
             [email]
         )
+        form.save(commit=True)
         return redirect('feedback:thanks')
 
     return render(request, template, context)
