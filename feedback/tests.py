@@ -1,10 +1,17 @@
+from django.core.files.uploadedfile import SimpleUploadedFile
 from django.test import Client, TestCase
 from django.urls import reverse
+
+import shutil, tempfile
+
+from io import BytesIO
 
 from parameterized import parameterized
 
 from . import forms
 from . import models
+
+MEDIA_ROOT = tempfile.mkdtemp()
 
 
 class FormTest(TestCase):
@@ -13,12 +20,18 @@ class FormTest(TestCase):
         super().setUpClass()
         cls.form = forms.FeedBackForm()
         cls.form_data = {
-            models.FeedBack.email.field.name: 'real@mail.not',
-            models.FeedBack.text.field.name: 'some text',
+            'email': 'real@mail.not',
+            'text': 'some text',
+            'name': 'name',
+            'attachments': ''
         }
 
+    @classmethod
+    def tearDownClass(cls):
+        shutil.rmtree(MEDIA_ROOT, ignore_errors=True)
+        super().tearDownClass()
+
     @parameterized.expand([
-        ('email', 'Email'),
         ('text', 'Текст'),
     ])
     def test_label_email(self, attr, expected):
@@ -28,7 +41,6 @@ class FormTest(TestCase):
         self.assertEquals(label, expected)
 
     @parameterized.expand([
-        ('email', 'Введите ваш email'),
         ('text', 'Введите текст вашей проблемы'),
     ])
     def test_help_text(self, attr, expected):
@@ -57,3 +69,27 @@ class FormTest(TestCase):
             follow=True
         )
         self.assertEqual(feedback_count + 1, models.FeedBack.objects.count())
+
+    def test_file_loading(self):
+        attach = BytesIO(b'some text')
+        attach.name = 'file_name.txt'
+        form_data = self.form_data.copy()
+
+        form_data['attachments'] = [
+            SimpleUploadedFile(
+                attach.name, attach.read()
+            )
+        ]
+        Client().post(
+            reverse('feedback:feedback'),
+            data=form_data,
+            follow=True
+        )
+        feedback = models.FeedBack.objects.filter(
+            user__email=form_data['email']
+        ).first()
+        for file in feedback.attachments.all():
+            with self.subTest('File does not created!'):
+                self.assertTrue(
+                    file.file.field.storage.exists(file.file.name)
+                )
