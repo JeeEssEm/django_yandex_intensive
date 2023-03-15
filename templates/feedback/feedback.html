@@ -4,7 +4,7 @@
 {% endblock title %}
 
 {% block content %}
-    <form method="post" class="form-control w-50 m-auto p-3">
+    <form method="post" class="form-control w-50 m-auto p-3" enctype="multipart/form-data">
         {% csrf_token %}
         <h3 class="mb-3">Форма обратной связи</h3>
         {% for field in form.visible_fields %}

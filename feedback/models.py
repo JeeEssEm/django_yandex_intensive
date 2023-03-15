@@ -1,4 +1,11 @@
+import pathlib
+
 import django.db.models
+
+
+class User(django.db.models.Model):
+    email = django.db.models.EmailField()
+    name = django.db.models.CharField(max_length=64)
 
 
 class FeedBack(django.db.models.Model):
@@ -11,13 +18,17 @@ class FeedBack(django.db.models.Model):
         received = 'received', 'получено'
         idle = 'idle', 'в процессе'
         answered = 'answered', 'ответ дан'
-
+    
+    user = django.db.models.ForeignKey(
+        to=User,
+        on_delete=django.db.models.deletion.CASCADE,
+        related_name='feedbacks'
+    )
     text = django.db.models.TextField('текст')
     created_on = django.db.models.DateTimeField(
         'Дата создания',
         auto_now_add=True
     )
-    email = django.db.models.EmailField('email')
     status = django.db.models.CharField(
         'статус',
         choices=Statuses.choices,
@@ -25,5 +36,19 @@ class FeedBack(django.db.models.Model):
         max_length=16
     )
 
+
+class Attachment(django.db.models.Model):
+    def get_upload_folder(instance, filename):
+        return pathlib.Path('upload_to') / str(instance.feedback.id) / filename
+
+    file = django.db.models.FileField(upload_to=get_upload_folder, null=True,
+                                      blank=True)
+    feedback = django.db.models.ForeignKey(
+        to=FeedBack,
+        on_delete=django.db.models.deletion.CASCADE,
+        related_name='attachments'
+    )
+
     def __str__(self):
         return 'Обратная связь'
+
