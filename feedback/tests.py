@@ -1,10 +1,10 @@
-from django.core.files.uploadedfile import SimpleUploadedFile
-from django.test import Client, TestCase
-from django.urls import reverse
-
-import shutil, tempfile
-
+import shutil
+import tempfile
 from io import BytesIO
+
+from django.core.files.uploadedfile import SimpleUploadedFile
+from django.test import Client, TestCase, override_settings
+from django.urls import reverse
 
 from parameterized import parameterized
 
@@ -14,6 +14,7 @@ from . import models
 MEDIA_ROOT = tempfile.mkdtemp()
 
 
+@override_settings(MEDIA_ROOT=MEDIA_ROOT)
 class FormTest(TestCase):
     @classmethod
     def setUpClass(cls):

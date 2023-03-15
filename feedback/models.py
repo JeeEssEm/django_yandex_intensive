@@ -1,6 +1,6 @@
-import django.db.models
-
 import pathlib
+
+import django.db.models
 
 
 class User(django.db.models.Model):
