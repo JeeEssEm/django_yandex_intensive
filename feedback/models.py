@@ -7,6 +7,9 @@ class User(django.db.models.Model):
     email = django.db.models.EmailField()
     name = django.db.models.CharField(max_length=64)
 
+    def __str__(self):
+        return self.email
+
 
 class FeedBack(django.db.models.Model):
 
@@ -18,7 +21,7 @@ class FeedBack(django.db.models.Model):
         received = 'received', 'получено'
         idle = 'idle', 'в процессе'
         answered = 'answered', 'ответ дан'
-    
+
     user = django.db.models.ForeignKey(
         to=User,
         on_delete=django.db.models.deletion.CASCADE,
@@ -36,13 +39,24 @@ class FeedBack(django.db.models.Model):
         max_length=16
     )
 
+    def __str__(self):
+        return self.text
+
 
 class Attachment(django.db.models.Model):
+    class Meta:
+        verbose_name = 'вложение'
+        verbose_name_plural = 'вложения'
+
     def get_upload_folder(instance, filename):
         return pathlib.Path('upload_to') / str(instance.feedback.id) / filename
 
-    file = django.db.models.FileField(upload_to=get_upload_folder, null=True,
-                                      blank=True)
+    file = django.db.models.FileField(
+        'вложение',
+        upload_to=get_upload_folder,
+        null=True,
+        blank=True
+    )
     feedback = django.db.models.ForeignKey(
         to=FeedBack,
         on_delete=django.db.models.deletion.CASCADE,
@@ -50,5 +64,4 @@ class Attachment(django.db.models.Model):
     )
 
     def __str__(self):
-        return 'Обратная связь'
-
+        return 'Вложения'
