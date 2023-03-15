@@ -10,19 +10,27 @@ class User(django.db.models.Model):
 
 class FeedBack(django.db.models.Model):
 
+    class Meta:
+        verbose_name = 'обратная связь'
+        verbose_name_plural = 'обратные связи'
+
     class Statuses(django.db.models.TextChoices):
         received = 'received', 'получено'
         idle = 'idle', 'в процессе'
         answered = 'answered', 'ответ дан'
-
-    text = django.db.models.TextField()
-    created_on = django.db.models.DateTimeField(auto_now_add=True)
+    
     user = django.db.models.ForeignKey(
         to=User,
         on_delete=django.db.models.deletion.CASCADE,
         related_name='feedbacks'
     )
+    text = django.db.models.TextField('текст')
+    created_on = django.db.models.DateTimeField(
+        'Дата создания',
+        auto_now_add=True
+    )
     status = django.db.models.CharField(
+        'статус',
         choices=Statuses.choices,
         default=Statuses.received,
         max_length=16
@@ -40,3 +48,7 @@ class Attachment(django.db.models.Model):
         on_delete=django.db.models.deletion.CASCADE,
         related_name='attachments'
     )
+
+    def __str__(self):
+        return 'Обратная связь'
+

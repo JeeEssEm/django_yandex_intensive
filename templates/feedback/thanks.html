@@ -8,8 +8,11 @@
         <h1 class="display-5 fw-bold">Спасибо!</h1>
         <div class="col-lg-6 mx-auto">
             <p class="lead mb-4">Ваша форма отправлена</p>
-            <a href="{% url 'homepage:home' %}">
+            <a href="{% url 'homepage:home' %}" class="text-decoration-none">
                 <button class="btn btn-primary">На главную</button>
+                <a href="{% url 'feedback:feedback' %}" class="text-decoration-none">
+                    <button class="btn btn-outline-primary">Ещё одну</button>
+                </a>
             </a>
         </div>
     </div>
