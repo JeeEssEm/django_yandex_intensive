@@ -25,6 +25,8 @@ SECRET_KEY = os.environ.get('SECRET_KEY', default='NOT_SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.environ.get('DEBUG', default='True') == 'True'
 
+ACTIVATED_USER = os.environ.get('ACTIVATED_USER', default='True') == 'True'
+
 if DEBUG:
     ALLOWED_HOSTS = ['*']
 else:
@@ -46,6 +48,7 @@ INSTALLED_APPS = [
     'about.apps.AboutConfig',
     'catalog.apps.CatalogConfig',
     'feedback.apps.FeedbackConfig',
+    'users.apps.UsersConfig',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',

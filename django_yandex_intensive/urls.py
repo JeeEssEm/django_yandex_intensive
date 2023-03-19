@@ -16,6 +16,7 @@ Including another URLconf
 from django.conf.urls.i18n import i18n_patterns
 from django.conf.urls.static import static
 from django.contrib import admin
+import django.contrib.auth.urls
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 from django.urls import include, path
 
@@ -29,6 +30,8 @@ urlpatterns = i18n_patterns(
     path('about/', include('about.urls')),
     path('feedback/', include('feedback.urls')),
     path('tinymce/', include('tinymce.urls')),
+    path('auth/', include('users.urls')),
+    path('auth/', include(django.contrib.auth.urls)),
     prefix_default_language=False
 )
 

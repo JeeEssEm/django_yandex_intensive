@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% block title %}
+  {{ title }}
+{% endblock title %}
+
+{% block content %}
+    <div class="text-center my-auto">
+        <h1 class="display-5 fw-bold">{{ title }}</h1>
+        <a href="{% url 'homepage:home' %}" class="text-decoration-none">
+            <button class="btn btn-lg btn-primary">На главную</button>
+        </a>
+    </div>
+{% endblock content %}
