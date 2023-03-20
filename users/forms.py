@@ -1,23 +1,11 @@
-import django.forms
+from django.contrib.auth.forms import UserCreationForm
+
+from django_yandex_intensive import settings
 
 
-class SignUpForm(django.forms.Form):
-    login = django.forms.CharField(label='Логин')
-    password = django.forms.CharField(
-        widget=django.forms.PasswordInput(),
-        label='Пароль'
-    )
-    repeat_password = django.forms.CharField(
-        widget=django.forms.PasswordInput(),
-        label='Повторите пароль'
-    )
-
-    def clean(self):
-        cleaned_data = super(SignUpForm, self).clean()
-        password = cleaned_data.get('password')
-        repeat_password = cleaned_data.get('repeat_password')
-
-        if password != repeat_password:
-            raise django.forms.ValidationError(
-                'Пароли не совпадают'
-            )
+class SignUpForm(UserCreationForm):
+    def save(self, commit=True):
+        user = super(SignUpForm, self).save(commit=False)
+        user.is_staff = False
+        user.is_active = settings.DEBUG or settings.ACTIVATED_USER
+        user.save()

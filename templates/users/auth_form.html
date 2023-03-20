@@ -22,7 +22,7 @@
                          id="{{ field.id_for_label }}"
                          class="form-control"
                          type="{{ field.widget_type }}"
-                         value="{{ field.value }}"
+                            value="{{ field.value|default:'' }}"
                   >
                   <label for="{{ field.auto_id }}" class="">
                       {{ field.label }}
