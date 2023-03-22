@@ -73,6 +73,10 @@ MIDDLEWARE = [
     'debug_toolbar.middleware.DebugToolbarMiddleware',
 ]
 
+AUTHENTICATION_BACKENDS = [
+    'users.auth.EmailLoginAuth',
+]
+
 if REVERSE_REQUEST:
     MIDDLEWARE.append('my_middleware.middleware.ReverseMiddleware')
 

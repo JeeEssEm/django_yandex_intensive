@@ -94,3 +94,11 @@ class FormTest(TestCase):
                 self.assertTrue(
                     file.file.field.storage.exists(file.file.name)
                 )
+
+    def test_status(self):
+        response = Client().post(
+            reverse('feedback:feedback'),
+            data=self.form_data,
+            follow=True
+        )
+        self.assertEqual(response.status_code, 200)

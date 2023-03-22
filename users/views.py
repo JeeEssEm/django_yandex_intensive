@@ -10,6 +10,7 @@ from django_yandex_intensive import settings
 import jwt
 
 from . import forms
+from . import models
 
 
 def signup(request):
@@ -79,7 +80,7 @@ def activate_user(request, token):
 
 def user_list(request):
     template = 'users/user_list.html'
-    users = User.objects.filter(is_active=True).only('username', 'id').all()
+    users = models.ProxyUser.objects.get_active_users().all()
     context = {
         'users': users,
         'title': 'Список активных пользователей'
@@ -89,17 +90,11 @@ def user_list(request):
 
 def user_detail(request, pk):
     template = 'users/user_detail.html'
-    query_user = User.objects.filter(pk=pk).select_related('profile').only(
-        'first_name',
-        'last_name',
-        'profile__image',
-        'profile__birthday',
-        'profile__coffee_count'
-    )
+    query_user = models.ProxyUser.objects.get_user_detail(pk)
     user = get_object_or_404(query_user)
 
     context = {
-        'user_page': user,
+        'user': user,
         'title': 'Пользователь'
     }
 

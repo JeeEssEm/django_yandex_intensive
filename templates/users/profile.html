@@ -5,11 +5,20 @@
 {% endblock title %}
 
 {% block content %}
+{% load thumbnail %}
     <form method="post"
           class="form-signin m-auto col-lg-3 d-flex justify-content-center flex-column"
           enctype="multipart/form-data">
         {% csrf_token %}
         <h1 class="h3 mb-3 fw-normal">{{ title }}</h1>
+        {% thumbnail user.profile.image "300x300" crop="center" as img %}
+                            <img src="{{ MEDIA_URL }}/{{ img }}"
+                                 alt="нет аватарки"
+                                 width="auto"
+                                 height="auto"
+                                 class="rounded mb-4"
+                            />
+        {% endthumbnail %}
         {% with form=user_form %}
             {% include "includes/auth_form.html" %}
         {% endwith %}

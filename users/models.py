@@ -5,6 +5,8 @@ from annoying.fields import AutoOneToOneField
 from django.contrib.auth.models import User
 from django.db import models
 
+from .managers import UserManager
+
 
 class Profile(models.Model):
     def get_upload_folder(instance, filename):
@@ -20,4 +22,14 @@ class Profile(models.Model):
     coffee_count = models.IntegerField('кофе', default=0)
 
     class Meta:
-        verbose_name = 'Дополнительная информация'
+        verbose_name = 'дополнительная информация'
+
+    def __str__(self):
+        return 'Профиль'
+
+
+class ProxyUser(User):
+    objects = UserManager()
+
+    class Meta:
+        proxy = True

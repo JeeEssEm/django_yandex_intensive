@@ -1,11 +1,13 @@
-from django.contrib.auth.forms import UserCreationForm
-from django.contrib.auth.models import User
+from django.contrib.auth.forms import (
+    AuthenticationForm, UserChangeForm, UserCreationForm
+)
+from django.core.exceptions import ValidationError
 from django.forms.fields import TextInput
 from django.forms.models import ModelForm
 
 from django_yandex_intensive import settings
 
-from .models import Profile
+from .models import Profile, User
 
 
 class SignUpForm(UserCreationForm):
@@ -22,6 +24,13 @@ class SignUpForm(UserCreationForm):
         user.is_active = settings.DEBUG or settings.ACTIVATED_USER
         user.save()
         return user
+
+    def clean_email(self):
+        email = self.cleaned_data.get('email')
+        users_count = User.objects.filter(email=email).exists()
+        if users_count != 0:
+            raise ValidationError('Такой email уже существует')
+        return email
 
 
 class EditProfileForm(ModelForm):
@@ -45,7 +54,7 @@ class EditProfileForm(ModelForm):
         )
 
 
-class EditUserForm(ModelForm):
+class EditUserForm(UserChangeForm):
     class Meta:
         model = User
 
@@ -54,3 +63,25 @@ class EditUserForm(ModelForm):
             User.last_name.field.name,
             User.email.field.name,
         )
+        exclude = (
+            User.password.field.name,
+        )
+
+    def clean_email(self):
+        email = self.cleaned_data.get('email')
+        if email == self.instance.email:
+            return email
+
+        users_count = User.objects.filter(email=email).exists()
+        if users_count != 0:
+            raise ValidationError('Такой email уже существует')
+        return email
+
+
+class LoginForm(AuthenticationForm):
+    class Meta:
+        model = User
+
+    def __init__(self, *args, **kwargs):
+        super(LoginForm, self).__init__(*args, **kwargs)
+        self.fields['username'].label = 'Имя пользователя/email'

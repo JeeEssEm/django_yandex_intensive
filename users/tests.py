@@ -8,6 +8,8 @@ from django_yandex_intensive import settings
 
 import jwt
 
+from parameterized import parameterized
+
 
 class UsersTest(TestCase):
 
@@ -21,7 +23,14 @@ class UsersTest(TestCase):
             'password2': 'pwd123asd'
         }
         cls.user = User.objects.create_user(
+            username='user',
+            email='active@host.com',
+            password='asdasd123',
+            is_active=True
+        )
+        cls.not_active_user = User.objects.create_user(
             username='test_user',
+            email='test@hostmail.com',
             password='asdasd123',
             is_active=False
         )
@@ -54,7 +63,7 @@ class UsersTest(TestCase):
         token = jwt.encode(
             {
                 'exp': exp,
-                'username': self.user.username,
+                'username': self.not_active_user.username,
             },
             settings.SECRET_KEY,
             algorithm='HS256'
@@ -69,3 +78,31 @@ class UsersTest(TestCase):
         )
         self.assertEqual(active_users + 1,
                          User.objects.filter(is_active=True).count())
+
+    def test_unique_email(self):
+        users_count = User.objects.count()
+        Client().post(
+            reverse('users:signup'),
+            data={
+                'username': self.user.username,
+                'password1': 'pwd123asd',
+                'password2': 'pwd123asd'
+            },
+            follow=True
+        )
+        self.assertEqual(users_count, User.objects.count())
+
+    @parameterized.expand([
+        ('user',),
+        ('active@host.com',)
+    ])
+    def test_login(self, username):
+        response = self.client.post(
+            reverse('users:login'),
+            data={
+                'username': username,
+                'password': 'asdasd123'
+            },
+            follow=True
+        )
+        self.assertEqual(response.context['user'], self.user)
