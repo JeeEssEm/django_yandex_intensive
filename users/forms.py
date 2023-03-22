@@ -1,13 +1,12 @@
 from django.contrib.auth.forms import (
     AuthenticationForm, UserChangeForm, UserCreationForm
 )
-from django.core.exceptions import ValidationError
 from django.forms.fields import TextInput
 from django.forms.models import ModelForm
 
 from django_yandex_intensive import settings
 
-from .models import Profile, User
+from .models import Profile, ProxyUser, User
 
 
 class SignUpForm(UserCreationForm):
@@ -24,13 +23,6 @@ class SignUpForm(UserCreationForm):
         user.is_active = settings.DEBUG or settings.ACTIVATED_USER
         user.save()
         return user
-
-    def clean_email(self):
-        email = self.cleaned_data.get('email')
-        users_count = User.objects.filter(email=email).exists()
-        if users_count != 0:
-            raise ValidationError('Такой email уже существует')
-        return email
 
 
 class EditProfileForm(ModelForm):
@@ -56,26 +48,16 @@ class EditProfileForm(ModelForm):
 
 class EditUserForm(UserChangeForm):
     class Meta:
-        model = User
+        model = ProxyUser
 
         fields = (
-            User.first_name.field.name,
-            User.last_name.field.name,
-            User.email.field.name,
+            ProxyUser.first_name.field.name,
+            ProxyUser.last_name.field.name,
+            ProxyUser.email.field.name,
         )
         exclude = (
-            User.password.field.name,
+            ProxyUser.password.field.name,
         )
-
-    def clean_email(self):
-        email = self.cleaned_data.get('email')
-        if email == self.instance.email:
-            return email
-
-        users_count = User.objects.filter(email=email).exists()
-        if users_count:
-            raise ValidationError('Такой email уже существует')
-        return email
 
 
 class LoginForm(AuthenticationForm):

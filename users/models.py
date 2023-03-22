@@ -7,6 +7,8 @@ from django.db import models
 
 from .managers import UserManager
 
+User._meta.get_field('email')._unique = True  # NOQA
+
 
 class Profile(models.Model):
     def get_upload_folder(instance, filename):
