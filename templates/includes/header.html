@@ -53,11 +53,38 @@
                         {% trans "Форма обратной связи" %}
                     </a>
                 </li>
+            {% if user.is_superuser %}
+            <li class="nav-item">
+                <a href="{% url 'admin:index' %}" class="mx-2">
+                    <button class="btn btn-danger">{% trans "Админ панель" %}</button>
+                </a>
+            </li>
+            {% endif %}
+            <li class="nav-item">
+                <a href="{% url 'users:user_list' %}"
+                       class="nav-link {% if view_name == 'users:user_list' %}active{% endif %}">
+                        {% trans "Активные пользователи" %}
+                </a>
+            </li>
+
+        {% if not user.is_authenticated %}
+            <li class="nav-item">
+                <a href="{% url 'users:login' %}" class="text-decoration-none">
+                    <button class="btn btn-primary">Войти</button>
+                </a>
+                <a href="{% url 'users:signup' %}" class="text-decoration-none">
+                    <button class="btn btn-outline-primary">Зарегистрироваться</button>
+                </a>
+            </li>
+        {% elif user.is_authenticated %}
+            <li class="nav-item">
+                <a href="{% url 'users:profile' %}"
+                class="nav-link {% if view_name == 'users:profile' %}active{% endif %}">
+                    Профиль
+                </a>
+            </li>
+        {% endif %}
             {% endwith %}
         </ul>
-        {% if user.is_superuser %}
-            <a href="{% url 'admin:index' %}"><button class="btn btn-danger">{% trans "Админ панель" %}</button></a>
-        {% endif %}
-
     </header>
 </div>

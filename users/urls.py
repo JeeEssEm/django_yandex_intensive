@@ -7,12 +7,14 @@ app_name = 'users'
 
 urlpatterns = [
     path('signup/', views.signup, name='signup'),
-    path('profile/<int:pk>', views.profile, name='profile'),
+    path('activate/<str:token>', views.activate_user, name='activate'),
+    path('profile/', views.profile, name='profile'),
+    path('user_detail/<int:pk>', views.user_detail, name='user_detail'),
     path('user_list/', views.user_list, name='user_list'),
     path(
         'login/',
         auth_views.LoginView.as_view(
-            template_name='users/auth_form.html',
+            template_name='users/login.html',
             extra_context={
                 'title': 'Вход в аккаунт'
             }),
@@ -26,7 +28,7 @@ urlpatterns = [
     path(
         'password_change/',
         auth_views.PasswordChangeView.as_view(
-            template_name='users/auth_form.html',
+            template_name='users/password_form.html',
             extra_context={
                 'title': 'Смена пароля'
             }
@@ -43,7 +45,7 @@ urlpatterns = [
     path(
         'password_reset/',
         auth_views.PasswordResetView.as_view(
-            template_name='users/auth_form.html',
+            template_name='users/password_form.html',
             extra_context={
                 'title': 'Восстановление пароля'
             }
@@ -58,9 +60,9 @@ urlpatterns = [
         name='password_reset_done'
     ),
     path(
-        'password_reset/confirm',
+        'password_reset/<uidb64>/<token>',
         auth_views.PasswordResetConfirmView.as_view(
-            template_name='users/auth_form.html',
+            template_name='users/password_form.html',
         ),
         name='password_reset_confirm'
     ),

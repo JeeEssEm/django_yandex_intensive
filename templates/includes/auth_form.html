@@ -1,0 +1,30 @@
+
+{% for field in form.visible_fields %}
+    <div class="mb-3">
+        {% for error in field.errors %}
+            <div class="alert alert-danger">
+                {{ error|escape }}
+            </div>
+        {% endfor %}
+        <div class="form-floating">
+          <input name="{{ field.html_name }}"
+                 maxlength="{{ field.max_length }}"
+                 id="{{ field.id_for_label }}"
+                 class="form-control"
+                 type="{{ field.field.widget.input_type }}"
+                 value="{{ field.value|default_if_none:'' }}"
+                 {% if field.field.required %}
+                     required
+                 {% endif %}
+          />
+          <label for="{{ field.auto_id }}">
+              {{ field.label }}
+          </label>
+        </div>
+    </div>
+{% endfor %}
+{% for error in form.non_field_errors %}
+   <div class="alert alert-danger">
+       {{ error|escape }}
+   </div>
+{% endfor %}

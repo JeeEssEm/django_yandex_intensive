@@ -1,4 +1,70 @@
 {% extends "base.html" %}
-{% block content %}
+{% block title %}
+    {{ title }}
+{% endblock title %}
 
+{% block content %}
+    {% load thumbnail %}
+    {% load static %}
+    <div class="container m-auto">
+        <div class="row">
+            <div class="col-lg-4">
+                <div class="card mb-4">
+                    <div class="card-body text-center">
+                        {% thumbnail user_page.profile.image "300x300" crop="center" as img %}
+                            <img src="{{ MEDIA_URL }}/{{ img }}"
+                                 alt="нет аватарки"
+                                 width="auto"
+                                 height="auto"
+                                 class="rounded"
+                            />
+                        {% endthumbnail %}
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6 d-flex flex-column">
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-sm-3">
+                                <p class="mb-0">Имя:</p>
+                            </div>
+                            <div class="col-sm-9">
+                                <p class="text-muted mb-0">{{ user_page.first_name|default:'<span class="text-decoration-underline p-0 m-0">неуказано</span>' }}</p>
+                            </div>
+                        </div>
+                        <hr/>
+                        <div class="row">
+                            <div class="col-sm-3">
+                                <p class="mb-0">Фамилия:</p>
+                            </div>
+                            <div class="col-sm-9">
+                                <p class="text-muted mb-0">{{ user_page.last_name|default:'<span class="text-decoration-underline p-0 m-0">неуказано</span>' }}</p>
+                            </div>
+                        </div>
+                        <hr/>
+                        <div class="row">
+                            <div class="col-sm-3">
+                                <p class="mb-0">Дата рождения:</p>
+                            </div>
+                            <div class="col-sm-9">
+                                <p class="text-muted mb-0">
+                                    {{ user_page.profile.birthday|default:'<span class="text-decoration-underline p-0 m-0">неуказано</span>' }}
+                                </p>
+                            </div>
+                        </div>
+                        <hr/>
+                        <div class="row">
+                            <div class="col-sm-3">
+                                <p class="mb-0">Выпито кофе:</p>
+                            </div>
+                            <div class="col-sm-9">
+                                <p class="text-muted mb-0">{{ user_page.profile.coffee_count }}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 {% endblock content %}

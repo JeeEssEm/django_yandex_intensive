@@ -1,4 +1,9 @@
 {% extends "base.html" %}
+
+{% block title %}
+    {{ title }}
+{% endblock title %}
+
 {% block content %}
     <div class="container px-4 py-5">
         <div class="row g-4 py-5 row-cols-1 row-cols-lg-3">
@@ -9,8 +14,7 @@
                             <h3>{{ user }}</h3>
                         </div>
                         <div class="card-body">
-                            <h3 class="card-title">{{ user.is_staff }}</h3>
-                            <a href="{% url 'users:profile' user.id %}">
+                            <a href="{% url 'users:user_detail' user.id %}">
                             <button class="btn btn-primary">Перейти в профиль</button>
                             </a>
                         </div>

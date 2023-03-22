@@ -18,6 +18,10 @@ def home(request):
 
 
 def coffee(request):
+    if request.user.is_authenticated:
+        request.user.profile.coffee_count += 1
+        request.user.profile.save()
+
     return HttpResponse(
         '<body>Я чайник</body>',
         status=HTTPStatus.IM_A_TEAPOT)

@@ -1,7 +1,6 @@
 {% extends "base.html" %}
-
 {% block title %}
-    {{ title }}
+ {{ title }}
 {% endblock title %}
 
 {% block content %}
@@ -10,19 +9,16 @@
           enctype="multipart/form-data">
         {% csrf_token %}
         <h1 class="h3 mb-3 fw-normal">{{ title }}</h1>
-        {% with form=user_form %}
+        {% with form=form %}
             {% include "includes/auth_form.html" %}
         {% endwith %}
-
-        {% with form=profile_form %}
-            {% include "includes/auth_form.html" %}
-        {% endwith %}
-
-        <div>
-            <a href="{% url 'homepage:coffee' %}" class="my-2" target="_blank">
-                <button class="btn btn-outline-info" type="button">Выпить кофе</button>
+        <div class="d-flex justify-content-between mb-3">
+            <a href="{% url 'users:login' %}" class="text-decoration-none">
+                Уже есть аккаунт?
             </a>
-            <p class="text-muted">Выпито кофе: {{ coffee_count }}</p>
+            <a href="{% url 'users:password_reset' %}" class="text-decoration-none">
+                Забыли пароль
+            </a>
         </div>
         <input type="submit" value="Подтвердить" class="btn btn-lg btn-primary"/>
     </form>
