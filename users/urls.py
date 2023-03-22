@@ -22,7 +22,9 @@ urlpatterns = [
     ),
     path(
         'logout/',
-        auth_views.LogoutView.as_view(template_name='users/logout.html'),
+        auth_views.LogoutView.as_view(
+            template_name='users/auth_message.html'
+        ),
         name='logout'
     ),
     path(

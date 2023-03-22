@@ -24,6 +24,18 @@
             </a>
             <p class="text-muted">Выпито кофе: {{ coffee_count }}</p>
         </div>
-        <input type="submit" value="Подтвердить" class="btn btn-lg btn-primary"/>
+        <input type="submit" value="Подтвердить" class="btn btn-lg btn-primary mb-4"/>
+        <div class="d-flex flex-column gap-2">
+            <a href="{% url 'users:logout' %}">
+                <button type="button" class="btn btn-lg btn-outline-warning w-100">
+                    Выйти из аккаунта
+                </button>
+            </a>
+            <a href="{% url 'users:password_change' %}">
+                <button type="button" class="btn btn-lg btn-outline-danger w-100">
+                    Поменять пароль
+                </button>
+            </a>
+        </div>
     </form>
 {% endblock content %}
