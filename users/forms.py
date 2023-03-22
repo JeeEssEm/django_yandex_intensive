@@ -73,7 +73,7 @@ class EditUserForm(UserChangeForm):
             return email
 
         users_count = User.objects.filter(email=email).exists()
-        if users_count != 0:
+        if users_count:
             raise ValidationError('Такой email уже существует')
         return email
 
