@@ -1,12 +1,10 @@
-from datetime import datetime, timedelta
+from core import utils
 
 from django.contrib.auth.models import User
 from django.test import Client, TestCase
 from django.urls import reverse
 
 from django_yandex_intensive import settings
-
-import jwt
 
 from parameterized import parameterized
 
@@ -58,16 +56,7 @@ class UsersTest(TestCase):
         смену секретного ключа вообще молчу)
         """
         active_users = User.objects.filter(is_active=True).count()
-        exp = datetime.utcnow() + timedelta(hours=12)
-
-        token = jwt.encode(
-            {
-                'exp': exp,
-                'username': self.not_active_user.username,
-            },
-            settings.SECRET_KEY,
-            algorithm='HS256'
-        )
+        token = utils.generate_token(self.not_active_user.username, 12)
         self.client.get(
             reverse(
                 'users:activate',
@@ -84,7 +73,8 @@ class UsersTest(TestCase):
         Client().post(
             reverse('users:signup'),
             data={
-                'username': self.user.username,
+                'email': self.user.email,
+                'username': self.user.username + 'a',
                 'password1': 'pwd123asd',
                 'password2': 'pwd123asd'
             },
@@ -106,3 +96,69 @@ class UsersTest(TestCase):
             follow=True
         )
         self.assertEqual(response.context['user'], self.user)
+
+    def test_ban(self):
+        active_users = User.objects.filter(is_active=True).count()
+        for _ in range(settings.AXES_FAILURE_LIMIT):
+            self.client.post(
+                reverse('users:login'),
+                data={
+                    'username': self.user.username,
+                    'password': 'hbjbjbhjkbn123123'
+                },
+                follow=True
+            )
+        self.assertEqual(active_users - 1,
+                         User.objects.filter(is_active=True).count())
+
+    def test_recover(self):
+        for _ in range(settings.AXES_FAILURE_LIMIT):
+            self.client.post(
+                reverse('users:login'),
+                data={
+                    'username': self.user.username,
+                    'password': 'hbjbjbhjkbn123123'
+                },
+                follow=True
+            )
+        token = utils.generate_token(self.user.username, 7 * 24)
+        self.client.get(
+            reverse(
+                'users:recover',
+                kwargs={
+                    'token': token
+                }
+            )
+        )
+        self.assertEqual(self.user.is_active, True)
+
+    @parameterized.expand([
+        ('john-week@yandex.ru', 'john.week@yandex.ru'),
+        ('john-week@yandex.ru', 'john-week@ya.ru'),
+        ('johnweek@gmail.com', 'john.week@gmail.com'),
+        ('john+we+ek@gmail.com', 'johnweek@gmail.com'),
+        ('john+we+ek@gmail.com', 'johnweek@gmail.com'.upper()),
+    ])
+    def test_normalize_email(self, email1, email2):
+        users_count = User.objects.count()
+        Client().post(
+            reverse('users:signup'),
+            data={
+                'username': email1.split('@')[0],
+                'email': email1,
+                'password1': 'hbjbjbhjkbn123123',
+                'password2': 'hbjbjbhjkbn123123'
+            },
+            follow=True
+        )
+        Client().post(
+            reverse('users:signup'),
+            data={
+                'username': email2.split('@')[0],
+                'email': email2,
+                'password1': 'hbjbjbhjkbn123123',
+                'password2': 'hbjbjbhjkbn123123'
+            },
+            follow=True
+        )
+        self.assertEqual(users_count + 1, User.objects.count())

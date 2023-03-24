@@ -12,6 +12,7 @@ urlpatterns = [
     path('profile/', views.profile, name='profile'),
     path('user_detail/<int:pk>', views.user_detail, name='user_detail'),
     path('user_list/', views.user_list, name='user_list'),
+    path('recover/<str:token>', views.recover, name='recover'),
     path(
         'login/',
         auth_views.LoginView.as_view(

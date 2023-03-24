@@ -40,6 +40,9 @@ REVERSE_REQUEST = os.environ.get('REVERSE_REQUEST', default='True') == 'True'
 
 EMAIL_ADDRESS = os.environ.get('EMAIL_ADDRESS', default='receiver@athlon.amd')
 
+
+AXES_FAILURE_LIMIT = int(os.environ.get('BAN_AFTER_TRIES', default=3))
+AXES_LOCKOUT_CALLABLE = 'core.utils.lock_account'
 # Application definition
 
 INSTALLED_APPS = [
@@ -58,6 +61,7 @@ INSTALLED_APPS = [
     'django_cleanup.apps.CleanupConfig',
     'sorl.thumbnail',
     'tinymce',
+    'axes',
     'debug_toolbar',
 ]
 
@@ -71,9 +75,11 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'debug_toolbar.middleware.DebugToolbarMiddleware',
+    'axes.middleware.AxesMiddleware',
 ]
 
 AUTHENTICATION_BACKENDS = [
+    'axes.backends.AxesStandaloneBackend',
     'users.auth.EmailLoginAuth',
 ]
 

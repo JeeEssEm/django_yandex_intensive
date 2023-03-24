@@ -1,8 +1,12 @@
+from core import utils
+
 from django.contrib.auth.forms import (
     AuthenticationForm, UserChangeForm, UserCreationForm
 )
+from django.core.exceptions import ValidationError
 from django.forms.fields import TextInput
 from django.forms.models import ModelForm
+
 
 from django_yandex_intensive import settings
 
@@ -21,8 +25,18 @@ class SignUpForm(UserCreationForm):
         user = super(SignUpForm, self).save(commit=False)
         user.is_staff = False
         user.is_active = settings.DEBUG or settings.ACTIVATED_USER
-        user.save()
-        return user
+        try:
+            user.save()
+            return user
+        except ValidationError as exc:
+            self.errors.update(exc)
+
+    def clean(self):
+        cleaned_data = super().clean()
+        cleaned_data['email'] = utils.normalize_email(
+            self.cleaned_data['email']
+        )
+        return cleaned_data
 
 
 class EditProfileForm(ModelForm):
@@ -47,6 +61,8 @@ class EditProfileForm(ModelForm):
 
 
 class EditUserForm(UserChangeForm):
+    password = None
+
     class Meta:
         model = ProxyUser
 
@@ -55,9 +71,19 @@ class EditUserForm(UserChangeForm):
             ProxyUser.last_name.field.name,
             ProxyUser.email.field.name,
         )
-        exclude = (
-            ProxyUser.password.field.name,
+
+    def save(self, commit=True):
+        try:
+            return super(EditUserForm, self).save()
+        except ValidationError as exc:
+            self.errors.update('email', exc)
+
+    def clean(self):
+        cleaned_data = super().clean()
+        cleaned_data['email'] = utils.normalize_email(
+            self.cleaned_data['email']
         )
+        return cleaned_data
 
 
 class LoginForm(AuthenticationForm):

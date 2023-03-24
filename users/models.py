@@ -2,10 +2,15 @@ import pathlib
 
 from annoying.fields import AutoOneToOneField
 
+from core import utils
+
 from django.contrib.auth.models import User
+from django.core.exceptions import ValidationError
 from django.db import models
+from django.dispatch import receiver
 
 from .managers import UserManager
+
 
 User._meta.get_field('email')._unique = True  # NOQA
 
@@ -35,3 +40,15 @@ class ProxyUser(User):
 
     class Meta:
         proxy = True
+
+
+@receiver(models.signals.pre_save, sender=User)
+def normalize_email(sender, instance, **kwargs):
+    normalized_email = utils.normalize_email(instance.email)
+    if normalized_email != instance.email:
+        exists = User.objects.filter(email=normalized_email
+                                     ).exclude(pk=instance.pk).exists()
+        if exists:
+            raise ValidationError('Такая почта уже существует')
+        instance.email = normalized_email
+        instance.save()
